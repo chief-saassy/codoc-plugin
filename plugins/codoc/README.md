@@ -20,11 +20,15 @@ skills/codoc/examples/       a worked round with a partial failure; a review by 
 
 Or try it from a checkout of codoc-plugin: `claude --plugin-dir plugins/codoc`.
 
-The first tool call signs in through your browser. Codoc's OAuth uses your Codoc account, and the plugin holds no secrets.
+Then sign in: run `/mcp`, choose `codoc`, and choose Authenticate. Your browser opens Codoc's sign-in; it uses your Codoc account, and the plugin holds no secrets. Until then the Codoc tools are not available.
 
 ## Install on claude.ai and the desktop app
 
-1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect to sign in. An organisation admin may need to add it.
+After adding the plugin, open its Connectors tab, add the Codoc connector, and press Connect to sign in with your Codoc account. An organisation admin may need to allow it.
+
+Without the plugin, add the two parts yourself:
+
+1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect.
 2. **Skill:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills.
 
 ## Self-hosting

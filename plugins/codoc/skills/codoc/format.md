@@ -122,6 +122,31 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `unread_comments` | Read the new comments before resolving. |
 | `review_closed` | `open_review`, then resubmit. |
 
+## A new document's Markdown
+
+`create_document`'s `markdown` is read the same way, with every block new, so it holds only plain content:
+
+- headings, paragraphs, lists (`1.` and `-`), tables, fenced code (including ```` ```mermaid ````), links, and images already uploaded;
+- `{#sec:label}` on what you will refer to, each label once; `@sec:label` only to a block in the same text;
+- the numbering front matter of a `md-source` export, if you start from one, is kept.
+
+Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), typed numbers (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), `numbering="…"` naming no series (`invalid_attribute`), and more than 128 KiB of Markdown (`invalid`).
+
+## `create_document` result
+
+`doc`, `url`, `version` (0), `title`, `labels: [{id, name}]`. The `url` opens it in Codoc for anyone who may read it; showing it is safe. The same `request_key` gives back the same `doc`, at its current `version`.
+
+## Label results
+
+`list_labels`: `labels: [{id, name, description, colour?, documents}]`. `update_label`: the label as it now is. `delete_label`: `{label, removedFrom}`.
+
+| code | do |
+|---|---|
+| `label_duplicate` | A label with that name, or nearly, exists: `details.existing` is its id. Use it. |
+| `unknown_label` | The message lists the labels. A label you deleted is gone. |
+| `label_in_use` | `delete_label`'s `documents` was not the real number, which is in `details.documents`. Tell the user before sending it. |
+| `forbidden` | A built-in label, which can't be deleted. |
+
 ## `read_document` result
 
 `markdown`, `version`, `format_version`, `working`, `warnings`, and `brief: {threads, suggestions, changes: {blocks, decided, resolved}, numbers, warnings}`. It never moves your cursor.
