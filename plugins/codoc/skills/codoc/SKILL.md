@@ -91,15 +91,26 @@ You can't suggest a change to an existing line's level, depth, label or `format`
 
 ## New documents
 
-`create_document(title, markdown?, labels?, request_key?)` makes a document the user owns. Use it when the user asks for a new document, or for a draft of something to review ("draft a policy for us to go through"). Don't make one they didn't ask for, or a new copy of a document that exists: `list_documents` first if it might.
+`create_document(title, markdown?, labels?, request_key?, base_url?, source?)` makes a document the user owns. Use it when the user asks for a new document, for a draft of something to review ("draft a policy for us to go through"), or to bring a Markdown file into Codoc. Don't make one they didn't ask for, or a new copy of a document that exists: `list_documents` first if it might.
 
 - `markdown` is your first draft, written as in *Structure and numbers* above and `format.md`: it becomes the text itself, not suggestions, so write no CriticMarkup, suggestion tags or comment markers.
-- **Headings start at `#`.** The document's title is `title`, outside the text, so don't repeat it as a heading. Top-level sections are heading 1 (`#`), their subsections heading 2 (`##`), then 3 and so on. Don't start every section at `##`: when you import a file that does, because its `#` was the title, move every heading up one level. Give headings and items you'll refer to a `{#sec:label}`; `@sec:label` must name a block in the same text. Without `markdown` the document starts empty.
+- **Headings start at `#`.** The document's title is `title`, outside the text, so don't repeat it as a heading. Top-level sections are heading 1 (`#`), their subsections heading 2 (`##`), then 3 and so on. (An imported file that repeats the title as `#` and starts its sections at `##` is fixed for you: see *Importing existing Markdown*.) Every heading gets a readable label from its words (`## CIDR ledger` is `sec:cidr-ledger`, a repeat `-2`), so `{#sec:label}` is optional on headings; give one to a list item you'll refer to. `@sec:label` must name a block in the same text. Without `markdown` the document starts empty.
 - `labels` are ids from `list_labels`.
 - Always send a `request_key` you make up for this one document (`retention-policy-1`). If the answer is lost, send the same call again: the same key returns the same document, never a second one. A new document needs a new key.
 - If it is refused (`typed_number`, `unknown_ref`, `markup_altered`, `unknown_label`), nothing was made: fix what `message` says and send it again.
+- The result's `report` lists every change made to your text on the way in (labels given, links kept as text…). Read it; it is empty when you wrote Codoc's own Markdown with labels.
 - The result's `url` is safe to show the user: it opens the document for anyone who may read it, after they sign in. Give it to them. It is not `download_url`.
 - To add images, `upload_image` to the new document, then add them with an edit. To review the draft, `open_review` it like any other document.
+
+### Importing existing Markdown
+
+When the user asks to bring in a Markdown file (a README, a design doc from GitHub or GitLab), send it **unmodified**: don't rewrite links, renumber or reflow it first. Codoc does the conversion and tells you what it did.
+
+- `title`: the document's name, usually the file's `# heading` (or the user's choice). A leading `# heading` that says the same as the title is dropped, so it isn't there twice; if the sections were then `##`, every heading moves up one so top-level sections are heading 1.
+- `base_url`: the https address of the file as it is viewed (`https://gitlab.com/group/repo/-/blob/main/docs/design.md`), so relative links like `../terraform/AGENTS.md` resolve to working links. Without it a relative link is kept as its words and reported, never refused.
+- `source`: `{url, commit?}`, where it came from (the same address, and the commit if you know it). It is kept with the document and `read_document` returns it.
+- Links to `#a-heading` become `@sec:` references to that heading; one matching no heading stays as its words. Hard-wrapped lines join into paragraphs, typed heading numbers (`## 2. Scope`) come off (Codoc numbers headings), a numbered list stays numbered, and what Codoc has no form for (block quotes, footnotes, raw HTML, horizontal rules) is kept as text or dropped, each listed.
+- Then check `report` and tell the user, in a line or two, what changed that they would notice: links kept as text (and why), the title heading dropped, anything kept as text or dropped. Give them the `url`.
 
 ## Labels
 

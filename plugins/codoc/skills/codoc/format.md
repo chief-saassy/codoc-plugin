@@ -129,14 +129,33 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 
 - headings, paragraphs, lists (`1.` and `-`), tables, fenced code (including ```` ```mermaid ````), inline code, links, and images already uploaded;
 - headings from `#`: the title is not in the text, so the top-level sections are heading 1 and their subsections heading 2, 3 and so on;
-- `{#sec:label}` on what you will refer to, each label once; `@sec:label` only to a block in the same text;
+- `{#sec:label}` on a list item you will refer to, each label once; headings get one from their words if they have none (`sec:cidr-ledger`, then `-2`, `-3`); `@sec:label` only to a block in the same text;
 - the numbering front matter of a `md-source` export, if you start from one, is kept.
 
-Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), typed numbers (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), `numbering="…"` naming no series (`invalid_attribute`), and more than 128 KiB of Markdown (`invalid`).
+Markdown written elsewhere is turned into this first, and every change is listed in the result's `report`:
+
+| written | becomes | `change` |
+|---|---|---|
+| `# Same as the title` at the very start | dropped | `title_dropped` |
+| sections all `##` or deeper | moved up so the top level is `#` | `headings_promoted` |
+| a heading without `{#sec:…}` (or with `{#id}`) | labelled from its words | `label_assigned` |
+| `## 2. Scope`, `### 4.1 Fees` | `Scope`, `Fees`: numbers are computed | `heading_number_removed` |
+| `[w](../a.md)` with `base_url` | `[w](https://…/a.md)` | `link_resolved` |
+| `[w](../a.md)` without `base_url`, or a scheme other than http, https, mailto | `w` | `link_kept_as_text` |
+| `[w](#a-heading)` | `@sec:a-heading`'s label | `anchor_to_ref` |
+| `[w](#nothing-here)` | `w` | `anchor_kept_as_text` |
+| `![alt](picture.png)` | a link to it (upload it to show it) | `image_kept_as_link` |
+| two spaces, `\` or `<br>` at a line's end | a space: a paragraph is one run of text | `line_break_joined` |
+| block quotes, footnotes, task boxes, raw HTML | kept as text | `kept_as_text` |
+| HTML comments, `---` rules, YAML front matter | dropped | `dropped` |
+
+Also, without a report entry because nothing a reader sees changes: `1. 2. 3.` lists are read as numbered lists, `_x_` and `__x__` as `*x*` and `**x**`, `~~~` fences as ```` ``` ````, setext headings as `#`. Code is never touched.
+
+Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), a typed number at the start of a paragraph (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), `numbering="…"` naming no series (`invalid_attribute`), a `base_url` or `source.url` that isn't https (`invalid`), and more than 128 KiB of Markdown (`invalid`).
 
 ## `create_document` result
 
-`doc`, `url`, `version` (0), `title`, `labels: [{id, name}]`. The `url` opens it in Codoc for anyone who may read it; showing it is safe. The same `request_key` gives back the same `doc`, at its current `version`.
+`doc`, `url`, `version` (0), `title`, `labels: [{id, name}]`, `report: [{change, from, to?, count?, note?}]` (one entry per kind of change and text, with `count` when it happened more than once; empty for Codoc's own Markdown). The `url` opens it in Codoc for anyone who may read it; showing it is safe. The same `request_key` gives back the same `doc`, at its current `version`.
 
 ## Label results
 
@@ -151,4 +170,4 @@ Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, b
 
 ## `read_document` result
 
-`markdown`, `version`, `format_version`, `working`, `warnings`, and `brief: {threads, suggestions, changes: {blocks, decided, resolved}, numbers, warnings}`. It never moves your cursor.
+`markdown`, `version`, `format_version`, `source` (`{url, commit?}`, if it was imported with one), `working`, `warnings`, and `brief: {threads, suggestions, changes: {blocks, decided, resolved}, numbers, warnings}`. It never moves your cursor.
