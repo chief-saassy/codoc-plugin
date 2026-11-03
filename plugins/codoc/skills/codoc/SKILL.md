@@ -76,6 +76,7 @@ It is Markdown's own structure, so write what you'd write in any Markdown file. 
 | normal text | a plain paragraph, not indented. It ends the list, and the next item starts a new one |
 | a list's own look, on its first item | `1. {#sec:pay format="(a)"} the text`. Formats: `(a)`, `a.`, `A`, `(i)`, `i`, `I`, `1.`, `(1)`, `01`, `bullet` |
 | a list carrying on the count of the previous one | `1. {#sec:breach continue} the text` |
+| inline code: a path, a name, a command | backticks, `` `deploy/releases/v2/` ``. Bold and italics are `**…**` and `*…*` |
 | a link | `[the words](https://example.com/x)`. An address is `http`, `https` or `mailto`. For another Codoc document, keep the `[text](codoc:…)` form you read |
 
 Headings and lists number apart. The document decides whether headings are numbered, and you can tell from the comments: `numbered` or `-` in a heading's braces overrides that for one heading, and you rarely want it. A new item you add starts its braces with a new label you choose.

@@ -19,7 +19,8 @@ Clean Markdown, one sentence per line, plus:
 | `{c8}` on its own line | a thread on the whole block below | copy as is |
 | `{>>#c7 @adrian 2026-10-24: …<<}` | one comment, read-only | use a `reply` item |
 | `[words](https://…)`, `[words](codoc:abc#sec:fees)` | a link; `codoc:` is another Codoc document | keep it as it is; a bad address is refused with `invalid_link` |
-| `\*`, `\{`, `\@sec:` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
+| `` `RELEASE_VERSION` ``, ``` `` a ` b `` ``` | inline code: a file path, a name, a command | write it with backticks, as in any Markdown. Inside, nothing is formatting and backslashes are text, except `\` before review markup (`\{++`) or, in a table, before `\|` |
+| `\*`, `\{`, `\@sec:`, `` \` `` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
 
 An author reads `@user`, then `/client` for anything but the web editor, then `/hat`: `@sam/claude-code/security`. Decided suggestions and resolved threads aren't shown; `thread(doc, thread)` has their history.
 
