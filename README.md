@@ -9,16 +9,20 @@ Review, comment on and suggest changes to [Codoc](https://codoc.sassysaas.cc) do
 /plugin install codoc@codoc
 ```
 
-When the plugin is enabled, Claude Code asks for your Codoc MCP URL: `https://<your Codoc domain>/mcp` (for the hosted Codoc, `https://codoc.sassysaas.cc/mcp`). The first tool call signs you in through your browser with your Codoc account; the plugin holds no secrets.
+The plugin connects to the hosted Codoc at `https://codoc.sassysaas.cc/mcp`. The first tool call signs you in through your browser with your Codoc account; the plugin holds no secrets.
 
 ## Install on claude.ai and the desktop app
 
-1. **Connector:** add a custom connector with the same MCP URL.
+1. **Connector:** in Settings → Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press **Connect** to sign in with your Codoc account. An organisation admin may need to add it.
 2. **Skill:** zip `plugins/codoc/skills/codoc/` and upload it under Settings → Capabilities → Skills.
+
+## Self-hosting
+
+For your own Codoc deployment, fork this repository and change the `url` in `plugins/codoc/.mcp.json` to `https://<your domain>/mcp`, or add your endpoint as your own connector.
 
 ## Layout
 
 ```
 .claude-plugin/marketplace.json     the marketplace, listing the plugin
-plugins/codoc/                      the plugin (see its README)
+plugins/codoc/                      the plugin (see its README), published from chief-saassy/codoc; edit it there
 ```
