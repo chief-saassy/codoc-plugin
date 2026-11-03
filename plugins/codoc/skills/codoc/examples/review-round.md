@@ -14,6 +14,8 @@ Trimmed result:
 {
   "review": "r3",
   "version": 14,
+  "role": "suggester",
+  "owner": "sam",
   "handoff": "First pass done: suggestions on retries, signing and rollout, threads open.",
   "agenda": {
     "replies": [
@@ -32,7 +34,7 @@ Trimmed result:
 }
 ```
 
-So: word c1 and reply, reply on c4 with no new suggestion, and leave `sec:monitoring` alone.
+So: word c1 and reply, reply on c4 with no new suggestion, and leave `sec:monitoring` alone. The document is Sam's, not the user's, so the wording goes in as a suggestion: `mode:"suggest"`.
 
 ## Submit
 
@@ -41,6 +43,7 @@ The edit comes first, `old` avoids the comment markers, and the reply cites the 
 ```json
 {
   "review": "r3",
+  "mode": "suggest",
   "group": "webhook review",
   "done": true,
   "handoff": "Wording for c1 suggested; c4 acknowledged; rollout left as written.",
@@ -76,6 +79,7 @@ The c4 reply is written, so it isn't sent again. Sam's words are new, so they st
 ```json
 {
   "review": "r4",
+  "mode": "suggest",
   "group": "webhook review",
   "done": true,
   "handoff": "Wording for c1 suggested; c4 acknowledged; rollout left as written.",

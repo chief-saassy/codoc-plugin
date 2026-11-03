@@ -94,7 +94,7 @@ A new block whose text starts with a typed number, such as `(a) ` or `5.1 `, is 
 
 ## `open_review` result
 
-`review`, `version`, `format_version`, `handoff?`, `mine: {open_threads, pending_suggestions}`, `blocks: {ref: markdown}`, `working: [{by, since, lastSeen, stale}]`, `warnings`, and:
+`review`, `version`, `format_version`, `role` (the user's: `owner`, `editor`, `suggester` or `viewer`), `owner` (whose document it is), `handoff?`, `mine: {open_threads, pending_suggestions}`, `blocks: {ref: markdown}`, `working: [{by, since, lastSeen, stale}]`, `warnings`, and:
 
 ```
 agenda.replies   [{thread, block, quote, new: [comment], needs_reply}]
@@ -170,4 +170,4 @@ Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, b
 
 ## `read_document` result
 
-`markdown`, `version`, `format_version`, `source` (`{url, commit?}`, if it was imported with one), `working`, `warnings`, and `brief: {threads, suggestions, changes: {blocks, decided, resolved}, numbers, warnings}`. It never moves your cursor.
+`markdown`, `version`, `format_version`, `role`, `owner`, `source` (`{url, commit?}`, if it was imported with one), `working`, `warnings`, and `brief: {threads, suggestions, changes: {blocks, decided, resolved}, numbers, warnings}`. It never moves your cursor.

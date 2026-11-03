@@ -1,6 +1,6 @@
 # Two hats on a design document
 
-The user asks for a security review and an alternatives review of a token cache design, as one piece of work. Run one review per hat, typically one subagent each, and pass the same `group`.
+The user asks for a security review and an alternatives review of a token cache design, as one piece of work. Run one review per hat, typically one subagent each, and pass the same `group`. The user asked for reviews to decide, so both submit `mode:"suggest"`, though the document is theirs.
 
 ## security
 
@@ -9,6 +9,7 @@ The user asks for a security review and an alternatives review of a token cache 
 ```json
 {
   "review": "r1",
+  "mode": "suggest",
   "group": "design review",
   "done": true,
   "handoff": "Suggested in-memory-only caching; asked about key rotation.",
@@ -32,6 +33,7 @@ Its changes to security's proposed text become its own suggestion on top. Its co
 ```json
 {
   "review": "r2",
+  "mode": "suggest",
   "group": "design review",
   "done": true,
   "handoff": "Asked for a paragraph on the service-account option; widened s1 to cover D1.",
