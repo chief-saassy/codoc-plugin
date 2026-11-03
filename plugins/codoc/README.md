@@ -3,9 +3,9 @@
 The Codoc MCP server plus the skill that teaches agents its review workflow.
 
 ```
-.claude-plugin/plugin.json   name, version, icon
+.claude-plugin/plugin.json   name, version
 .mcp.json                    the MCP server: https://codoc.sassysaas.cc/mcp
-icon.png                     the Codoc logo
+icon.png                     the Codoc logo, for a directory listing (plugin.json has no icon key)
 skills/codoc/SKILL.md        the review workflow, read on every use
 skills/codoc/format.md       reference: agent Markdown, numbering attributes, results, failure codes
 skills/codoc/examples/       a worked round with a partial failure; a review by two hats

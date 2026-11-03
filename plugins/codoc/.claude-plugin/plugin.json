@@ -1,10 +1,9 @@
 {
   "name": "codoc",
   "displayName": "Codoc",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Review, comment on and suggest changes to Codoc documents from Claude: the Codoc MCP server and the skill that teaches its review workflow.",
   "author": { "name": "Codoc" },
   "homepage": "https://codoc.sassysaas.cc",
-  "repository": "https://github.com/chief-saassy/codoc-plugin",
-  "icon": "./icon.png"
+  "repository": "https://github.com/chief-saassy/codoc-plugin"
 }
