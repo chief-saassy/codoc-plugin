@@ -1,0 +1,12 @@
+{
+  "name": "codoc",
+  "owner": { "name": "Codoc", "url": "https://github.com/chief-saassy" },
+  "metadata": { "description": "The Codoc plugin for Claude: the Codoc MCP server and the review skill." },
+  "plugins": [
+    {
+      "name": "codoc",
+      "source": "./plugins/codoc",
+      "description": "Review, comment on and suggest changes to Codoc documents from Claude: the Codoc MCP server and the skill that teaches its review workflow."
+    }
+  ]
+}
