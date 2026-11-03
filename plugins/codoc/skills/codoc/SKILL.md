@@ -62,12 +62,12 @@ If you get `review_closed` (`done:true` closes the review even when items failed
 
 ## Structure and numbers
 
-It is Markdown's own structure, so write what you'd write in any Markdown file. Numbers are computed: never type one, in text or in a new paragraph. Refer to a clause by `@sec:label`, and read numbers from `<!-- (a), cited as 4.1(a) -->`, which are derived and ignored on write. A comment never changes what a block is.
+It is Markdown's own structure, so write what you'd write in any Markdown file. Numbers are computed: never type one, in text or in a new paragraph. Refer to a heading or a numbered item by `@sec:label`: it shows the number, or a heading's title when it has none. Read numbers from `<!-- (a), cited as 4.1(a) -->`, which are derived and ignored on write. A comment never changes what a block is.
 
 | you want | write |
 |---|---|
-| a heading; its level is its number of `#` | `## Notices {#sec:notices}` |
-| a clause: a numbered heading with no title, its text beside the number | `## {#sec:cap}`, next line, the text |
+| a heading; its level is its number of `#` | `# Notices {#sec:notices}`. The title is outside the text, so top-level sections are `#`, their subsections `##`, then `###` |
+| a numbered paragraph: a numbered heading with no title, its text beside the number | `## {#sec:cap}`, next line, the text |
 | a number on its own, its text below or none yet | `## {#sec:tbd empty}` |
 | a numbered list item | `1. {#sec:pay} the text`. Every item is `1.`: the real number is computed, and `2.` is refused |
 | a bullet | `- {#sec:point} the text` |
@@ -93,7 +93,8 @@ You can't suggest a change to an existing line's level, depth, label or `format`
 
 `create_document(title, markdown?, labels?, request_key?)` makes a document the user owns. Use it when the user asks for a new document, or for a draft of something to review ("draft a policy for us to go through"). Don't make one they didn't ask for, or a new copy of a document that exists: `list_documents` first if it might.
 
-- `markdown` is your first draft, written as in *Structure and numbers* above and `format.md`: it becomes the text itself, not suggestions, so write no CriticMarkup, suggestion tags or comment markers. Give headings and items you'll refer to a `{#sec:label}`; `@sec:label` must name a block in the same text. Without `markdown` the document starts empty.
+- `markdown` is your first draft, written as in *Structure and numbers* above and `format.md`: it becomes the text itself, not suggestions, so write no CriticMarkup, suggestion tags or comment markers.
+- **Headings start at `#`.** The document's title is `title`, outside the text, so don't repeat it as a heading. Top-level sections are heading 1 (`#`), their subsections heading 2 (`##`), then 3 and so on. Don't start every section at `##`: when you import a file that does, because its `#` was the title, move every heading up one level. Give headings and items you'll refer to a `{#sec:label}`; `@sec:label` must name a block in the same text. Without `markdown` the document starts empty.
 - `labels` are ids from `list_labels`.
 - Always send a `request_key` you make up for this one document (`retention-policy-1`). If the answer is lost, send the same call again: the same key returns the same document, never a second one. A new document needs a new key.
 - If it is refused (`typed_number`, `unknown_ref`, `markup_altered`, `unknown_label`), nothing was made: fix what `message` says and send it again.

@@ -10,7 +10,7 @@ Clean Markdown, one sentence per line, plus:
 |---|---|---|
 | `{#sec:fees}` after a heading | the block's handle | use it as `block` and in `@sec:fees` |
 | `<!-- 1.1 -->`, `<!-- (b), cited as 1.1(b) -->` | a computed number, and for a list item how to cite it | quote it to people; it is ignored on write |
-| `@sec:fees <!-- clause 1.1 -->` | a reference | write `@sec:fees`; the number follows |
+| `@sec:fees <!-- section 1.1 -->`, `@sec:rollout` | a reference to a heading or numbered item | write `@sec:fees`; the number follows. A heading with no number shows its title, and exports write "(see Rollout)" |
 | `{++new++}{>>#s13 @sam/claude<<}` | suggested insertion | copy as is |
 | `{--old--}{>>#s14 @adrian<<}` | suggested deletion | copy as is |
 | `{~~old~>new~~}{>>#s12 @adrian<<}` | suggested replacement | copy as is |
@@ -88,7 +88,7 @@ Writing `{#sec:pay format="(a)" continue}` would make that (c).
 
 Comments carry no meaning. `## {#sec:x} <!-- empty -->` is not how to say a number stands alone, and `<!-- 7 -->` doesn't set a number.
 
-A new document's lists count `(a)`, `(i)`, `(A)` by depth unless the document or the list says otherwise. Never rely on this in a clause reference: the numbers come from the comments.
+A new document's lists count `(a)`, `(i)`, `(A)` by depth unless the document or the list says otherwise. Never rely on this when you cite a number: the numbers come from the comments.
 
 A new block whose text starts with a typed number, such as `(a) ` or `5.1 `, is refused with `typed_number`, and so is a marker other than `1.`.
 
@@ -127,7 +127,8 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 
 `create_document`'s `markdown` is read the same way, with every block new, so it holds only plain content:
 
-- headings, paragraphs, lists (`1.` and `-`), tables, fenced code (including ```` ```mermaid ````), links, and images already uploaded;
+- headings, paragraphs, lists (`1.` and `-`), tables, fenced code (including ```` ```mermaid ````), inline code, links, and images already uploaded;
+- headings from `#`: the title is not in the text, so the top-level sections are heading 1 and their subsections heading 2, 3 and so on;
 - `{#sec:label}` on what you will refer to, each label once; `@sec:label` only to a block in the same text;
 - the numbering front matter of a `md-source` export, if you start from one, is kept.
 
