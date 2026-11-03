@@ -11,6 +11,8 @@ skills/codoc/format.md       reference: agent Markdown, numbering attributes, re
 skills/codoc/examples/       a worked round with a partial failure; a review by two hats
 ```
 
+Voice comments (dictating a comment with the microphone) are a web-app feature; agents work with the text that is posted.
+
 ## Install in Claude Code
 
 ```
