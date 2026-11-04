@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is for `format_version` 1; if it differs, tell the user the skill is out of date. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is for `format_version` 1; if it differs, tell the user the skill is out of date. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
