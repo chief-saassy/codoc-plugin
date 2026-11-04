@@ -67,6 +67,8 @@ Each item applies on its own. `applied` items are written: never send them again
 
 If you get `review_closed` (`done:true` closes the review even when items failed), call `open_review` again and resubmit there, with `done:true`. If an answer is lost, send the same call again.
 
+Then read `warnings`, in the `submit_review` result and in the next `open_review`. A warning never stops a write, so nothing else will tell you. Fix the ones your own changes introduced (a reference to something you deleted or renamed, a diagram that doesn't parse) in the same round, or in the next. Tell the user about the rest, which were already in the document or came from someone else, and leave them alone unless they ask you to fix them.
+
 ## Structure and numbers
 
 It is Markdown's own structure, so write what you'd write in any Markdown file. Numbers are computed: never type one, in text or in a new paragraph. Refer to a heading or a numbered item by `@sec:label`: it shows the number, or a heading's title when it has none. Read numbers from `<!-- (a), cited as 4.1(a) -->`, which are derived and ignored on write. A comment never changes what a block is.
@@ -84,8 +86,10 @@ It is Markdown's own structure, so write what you'd write in any Markdown file. 
 | a list's own look, on its first item | `1. {#sec:pay format="(a)"} the text`. Formats: `(a)`, `a.`, `A`, `(i)`, `i`, `I`, `1.`, `(1)`, `01`, `bullet` |
 | a list carrying on the count of the previous one | `1. {#sec:breach continue} the text` |
 | inline code: a path, a name, a command | backticks, `` `deploy/releases/v2/` ``. Bold and italics are `**…**` and `*…*` |
-| a link | `[the words](https://example.com/x)`. An address is `http`, `https` or `mailto`. For another Codoc document, keep the `[text](codoc:…)` form you read |
-| a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. More in `format.md` |
+| a link | `[the words](https://example.com/x)`. An address is `http`, `https`, `mailto` or `codoc:`. Another Codoc document is `[its title](codoc:{docId})`, a section of it `[section title](codoc:{docId}#sec:label)`; keep the `codoc:` form you read |
+| a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. Give it its title in the text, a short line just above or below it, not inside the diagram. More in `format.md` |
+
+**Link what you refer to; don't just name it.** In document text: a section of this document is `@sec:label`, another Codoc document `[its title](codoc:{docId})` or one of its sections `[section title](codoc:{docId}#sec:label)`, and an outside source an ordinary `https` link. In a comment or a reply, which are plain text, give the document's `url` (from `list_documents` or `create_document`, `https://codoc.sassysaas.cc/d/{docId}`) or the section's `@sec:label` and title. Take ids and labels from `list_documents` and `read_document`; never guess one.
 
 Headings and lists number apart. The document decides whether headings are numbered, and you can tell from the comments: `numbered` or `-` in a heading's braces overrides that for one heading, and you rarely want it. A new item you add starts its braces with a new label you choose.
 

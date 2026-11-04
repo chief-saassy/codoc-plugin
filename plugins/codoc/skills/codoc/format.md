@@ -18,7 +18,7 @@ Clean Markdown, one sentence per line, plus:
 | `{c7>}`, `{<c7}` | where thread `c7` is anchored | copy as is; can't be moved |
 | `{c8}` on its own line | a thread on the whole block below | copy as is |
 | `{>>#c7 @adrian 2026-10-24: …<<}` | one comment, read-only | use a `reply` item |
-| `[words](https://…)`, `[words](codoc:abc#sec:fees)` | a link; `codoc:` is another Codoc document | keep it as it is; a bad address is refused with `invalid_link` |
+| `[words](https://…)`, `[words](codoc:abc#sec:fees)` | a link; `codoc:{docId}` is another Codoc document, `codoc:{docId}#sec:label` a section of it | keep it as it is; a bad address is refused with `invalid_link`. To refer to something, link it: `@sec:label` in this document, `[title](codoc:{docId})` or `[title](codoc:{docId}#sec:label)` in another (ids from `list_documents`, labels from `read_document`), `https` outside Codoc |
 | `` `RELEASE_VERSION` ``, ``` `` a ` b `` ``` | inline code: a file path, a name, a command | write it with backticks, as in any Markdown. Inside, nothing is formatting and backslashes are text, except `\` before review markup (`\{++`) or, in a table, before `\|` |
 | `\*`, `\{`, `\@sec:`, `` \` `` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
 
@@ -51,7 +51,9 @@ A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram a
 - **No `;` in message, note or label text.** Mermaid reads `;` as the end of a statement, even after `:` in `A->>B: text`. Write a comma, or `#59;` if you need the semicolon itself.
 - **Quote labels with special characters:** `A["Read (cached); retry"]`, not `A[Read (cached); retry]`: parentheses, brackets, braces or `;` in an unquoted flowchart label break it.
 - Start with the diagram type on its own line (`flowchart TD`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2`, `erDiagram`, `gantt`, `pie`, `mindmap`, `timeline`, …).
+- **Title a diagram in the text, not inside it:** a short line just above or below the fence, such as a bold one-line `**Figure: Sign-in after the move**` or a sentence introducing it. No `title` front matter, `title` lines or title nodes in the diagram. A title in the text reads, searches and exports like the rest of the document, people can comment on it, and the diagram stays smaller.
 - A refusal names the diagram, the line (counted in the fence, from 1) and Mermaid's message; for an edit they are also in `details: {block, line, message}`. Fix that line and send the edit again. The rest of the batch still applies.
+- A diagram already in the document that doesn't parse (someone wrote it in the app, or it predates the check) is a warning, `{block, kind: "invalid-diagram", line, error, message}`, in `open_review` and `read_document`. Don't fix it unless it is yours or the user asks; tell them.
 
 ## Structure attributes
 
@@ -119,14 +121,14 @@ The agenda covers what is new since your last clean submit; a partial failure br
 
 `version`, `results: [{key?, index, status, created?, reason?, code?, block_now?, details?, note?}]`, `changed: {ref: markdown}`, `also_changed?: {ref: markdown}`, `also_changed_since?`, `warnings`, `notes?`.
 
-Use `changed` and `also_changed` as your current text. `warnings` lists problems your change introduced, such as a dangling reference; the change still applied. Common failure codes:
+Use `changed` and `also_changed` as your current text. `warnings` lists problems your change introduced, such as a dangling reference (`dangling-ref`) or a diagram that doesn't parse (`invalid-diagram`); the change still applied, so fix them yourself, in this round or the next. The `warnings` of `open_review` and `read_document` are every current problem, `{block, kind, target?, line?, error?, message}`: tell the user about those you didn't cause, and leave them unless asked. Common failure codes:
 
 | code | do |
 |---|---|
 | `old_not_found` | Read `block_now`. If someone changed the text, redo your edit on it and keep their words. |
 | `old_ambiguous` | Add surrounding words. |
 | `markup_altered` | You changed a tag, marker or thread line. Copy them as they are, or choose an `old` that avoids them. |
-| `invalid_link` | Use an `http`, `https` or `mailto` address. |
+| `invalid_link` | Use an `http`, `https` or `mailto` address, or `codoc:{docId}` / `codoc:{docId}#sec:label` for a Codoc document. |
 | `invalid_diagram` | A Mermaid diagram you wrote doesn't parse: fix the line in `details` (often a `;` in message text) and resend. See *Mermaid diagrams*. |
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
