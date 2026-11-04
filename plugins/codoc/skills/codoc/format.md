@@ -44,6 +44,10 @@ One edit that changes someone's proposed text and plain text as well is still on
 
 An image is a line `![alt text](codoc-image:sha256-…)` with its caption on the lines after it, up to a blank line. To add one, call `upload_image(doc, data)` first (base64 of the file, or the text of an SVG with `encoding: "utf8"`), then put the `markdown` line it returns, followed by a caption, in an edit, with a blank line before and after. Uploading the same bytes again gives the same `src`. The caption is text like any other; changing the alt text or the picture is a direct edit, refused in suggest mode. A `src` that was never uploaded is refused.
 
+## Code blocks
+
+A fenced block with its language, ```` ```ts ````, is shown as code with line numbers. Keep each line to 100 characters or fewer: that fits the page's text column, and a longer line makes the reader scroll sideways inside the block. Wrap long lines where the language allows, break a long shell command with `\` continuations, and shorten long literals (a hash, a URL, a JSON value) or move them to their own line, rather than letting a line run past 100.
+
 ## Mermaid diagrams
 
 A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram an edit, a suggestion or `create_document` adds or changes, and refuses one that doesn't parse (`invalid_diagram`), so the owner never opens a document to a parse error. Diagrams you don't touch are never held against you, even broken ones.
