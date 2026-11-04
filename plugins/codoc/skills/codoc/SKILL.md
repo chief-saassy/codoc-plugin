@@ -85,6 +85,7 @@ It is Markdown's own structure, so write what you'd write in any Markdown file. 
 | a list carrying on the count of the previous one | `1. {#sec:breach continue} the text` |
 | inline code: a path, a name, a command | backticks, `` `deploy/releases/v2/` ``. Bold and italics are `**…**` and `*…*` |
 | a link | `[the words](https://example.com/x)`. An address is `http`, `https` or `mailto`. For another Codoc document, keep the `[text](codoc:…)` form you read |
+| a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. More in `format.md` |
 
 Headings and lists number apart. The document decides whether headings are numbered, and you can tell from the comments: `numbered` or `-` in a heading's braces overrides that for one heading, and you rarely want it. A new item you add starts its braces with a new label you choose.
 
@@ -102,9 +103,9 @@ In suggest mode you can't change an existing line's level, depth, label or `form
 
 - `markdown` is your first draft, written as in *Structure and numbers* above and `format.md`: it becomes the text itself, not suggestions, so write no CriticMarkup, suggestion tags or comment markers.
 - **Headings start at `#`.** The document's title is `title`, outside the text, so don't repeat it as a heading. Top-level sections are heading 1 (`#`), their subsections heading 2 (`##`), then 3 and so on. (An imported file that repeats the title as `#` and starts its sections at `##` is fixed for you: see *Importing existing Markdown*.) Every heading gets a readable label from its words (`## CIDR ledger` is `sec:cidr-ledger`, a repeat `-2`), so `{#sec:label}` is optional on headings; give one to a list item you'll refer to. `@sec:label` must name a block in the same text. Without `markdown` the document starts empty.
-- `labels` are ids from `list_labels`.
+- **Label every new document.** `labels` are ids from `list_labels`: call it first and pick the labels that fit (see *Labels*). A new document should carry at least one.
 - Always send a `request_key` you make up for this one document (`retention-policy-1`). If the answer is lost, send the same call again: the same key returns the same document, never a second one. A new document needs a new key.
-- If it is refused (`typed_number`, `unknown_ref`, `markup_altered`, `unknown_label`), nothing was made: fix what `message` says and send it again.
+- If it is refused (`typed_number`, `unknown_ref`, `markup_altered`, `unknown_label`, `invalid_diagram`), nothing was made: fix what `message` says and send it again.
 - The result's `report` lists every change made to your text on the way in (labels given, links kept as text…). Read it; it is empty when you wrote Codoc's own Markdown with labels.
 - The result's `url` is safe to show the user: it opens the document for anyone who may read it, after they sign in. Give it to them. It is not `download_url`.
 - To add images, `upload_image` to the new document, then add them with an edit. To review the draft, `open_review` it like any other document.
@@ -135,6 +136,13 @@ When the user asks to bring in a Markdown file (a README, a design doc from GitH
 ## Labels
 
 `list_labels` gives each label's id, name, description and `documents`, how many documents you can see carry it. `set_labels` puts labels on a document and takes them off; `create_label` makes one, refusing a name that matches or nearly matches another, so use that one instead. `update_label(label, name?, description?)` renames it or changes its description everywhere.
+
+Documents should carry labels: they are how people find and filter documents. When you create a document, or work on one that has none, label it:
+
+- **Reuse first.** `list_labels` and read the names and descriptions; most documents fit labels that already exist (a client, a project, a kind such as `design` or `contract`). Prefer the ones already used on many documents.
+- **Create sparingly.** Make a new label only when nothing existing fits and the label will be useful for more than this one document. Give it a short, general name and a one-line description of what belongs under it. Never create near-duplicates, one-off labels, or a label per document.
+- **A few, not many.** One to three labels per document is usual.
+- On a document you are reviewing for someone else, suggest labels in your handoff or a comment instead of setting them, unless the user asked you to label it.
 
 `delete_label(label, documents)` deletes it and takes it off every document; it can't be undone. Unless the user asked for that label to be deleted, ask them first, saying how many documents carry it. `documents` is that number, from `list_labels`: if it has changed, the call is refused with the real number in `details.documents`. Tell the user the new number, and send it only if they still want it deleted. Built-in labels can't be deleted.
 

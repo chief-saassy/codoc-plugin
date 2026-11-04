@@ -44,6 +44,15 @@ One edit that changes someone's proposed text and plain text as well is still on
 
 An image is a line `![alt text](codoc-image:sha256-…)` with its caption on the lines after it, up to a blank line. To add one, call `upload_image(doc, data)` first (base64 of the file, or the text of an SVG with `encoding: "utf8"`), then put the `markdown` line it returns, followed by a caption, in an edit, with a blank line before and after. Uploading the same bytes again gives the same `src`. The caption is text like any other; changing the alt text or the picture is a direct edit, refused in suggest mode. A `src` that was never uploaded is refused.
 
+## Mermaid diagrams
+
+A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram an edit, a suggestion or `create_document` adds or changes, and refuses one that doesn't parse (`invalid_diagram`), so the owner never opens a document to a parse error. Diagrams you don't touch are never held against you, even broken ones.
+
+- **No `;` in message, note or label text.** Mermaid reads `;` as the end of a statement, even after `:` in `A->>B: text`. Write a comma, or `#59;` if you need the semicolon itself.
+- **Quote labels with special characters:** `A["Read (cached); retry"]`, not `A[Read (cached); retry]`: parentheses, brackets, braces or `;` in an unquoted flowchart label break it.
+- Start with the diagram type on its own line (`flowchart TD`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2`, `erDiagram`, `gantt`, `pie`, `mindmap`, `timeline`, …).
+- A refusal names the diagram, the line (counted in the fence, from 1) and Mermaid's message; for an edit they are also in `details: {block, line, message}`. Fix that line and send the edit again. The rest of the batch still applies.
+
 ## Structure attributes
 
 Braces go at the end of a heading line, and straight after an item's marker. A new block gets a `#sec:` label you choose: lowercase, unique, descriptive.
@@ -108,7 +117,7 @@ The agenda covers what is new since your last clean submit; a partial failure br
 
 ## `submit_review` result
 
-`version`, `results: [{key?, index, status, created?, reason?, code?, block_now?, note?}]`, `changed: {ref: markdown}`, `also_changed?: {ref: markdown}`, `also_changed_since?`, `warnings`, `notes?`.
+`version`, `results: [{key?, index, status, created?, reason?, code?, block_now?, details?, note?}]`, `changed: {ref: markdown}`, `also_changed?: {ref: markdown}`, `also_changed_since?`, `warnings`, `notes?`.
 
 Use `changed` and `also_changed` as your current text. `warnings` lists problems your change introduced, such as a dangling reference; the change still applied. Common failure codes:
 
@@ -118,6 +127,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `old_ambiguous` | Add surrounding words. |
 | `markup_altered` | You changed a tag, marker or thread line. Copy them as they are, or choose an `old` that avoids them. |
 | `invalid_link` | Use an `http`, `https` or `mailto` address. |
+| `invalid_diagram` | A Mermaid diagram you wrote doesn't parse: fix the line in `details` (often a `;` in message text) and resend. See *Mermaid diagrams*. |
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
 | `unread_comments` | Read the new comments before resolving. |
@@ -151,7 +161,7 @@ Markdown written elsewhere is turned into this first, and every change is listed
 
 Also, without a report entry because nothing a reader sees changes: `1. 2. 3.` lists are read as numbered lists, `_x_` and `__x__` as `*x*` and `**x**`, `~~~` fences as ```` ``` ````, setext headings as `#`. Code is never touched.
 
-Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), a typed number at the start of a paragraph (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), `numbering="…"` naming no series (`invalid_attribute`), a `base_url` or `source.url` that isn't https (`invalid`), and more than 128 KiB of Markdown (`invalid`).
+Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), a typed number at the start of a paragraph (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), a Mermaid diagram that doesn't parse (`invalid_diagram`, naming which diagram, the heading it is under and the line), `numbering="…"` naming no series (`invalid_attribute`), a `base_url` or `source.url` that isn't https (`invalid`), and more than 128 KiB of Markdown (`invalid`).
 
 ## `create_document` result
 
