@@ -14,8 +14,8 @@ The user asks for a security review and an alternatives review of a token cache 
   "done": true,
   "handoff": "Suggested in-memory-only caching; asked about key rotation.",
   "items": [
-    {"edit":{"block":"sec:cache","old":"until it expires","new":"in memory, never in KV or logs, until it expires"}},
-    {"comment":{"block":"sec:keys","quote":"service account key","body":"How is this key rotated, and who can read the secret?"}}
+    {"edit":{"block":"cache","old":"until it expires","new":"in memory, never in KV or logs, until it expires"}},
+    {"comment":{"block":"keys","quote":"service account key","body":"How is this key rotated, and who can read the secret?"}}
   ]
 }
 ```
@@ -25,7 +25,7 @@ The user asks for a security review and an alternatives review of a token cache 
 `open_review({doc:"d2", hat:"alternatives"})`. The agenda doesn't list security's threads, because they aren't addressed to this hat; the text does show them:
 
 ```markdown
-The Worker caches the ID token per user {++in memory, never in KV or logs, ++}{>>#s1 @sam/claude-code/security<<}until it expires.
+The Worker caches the ID token per user [in memory, never in KV or logs, ]{.insertion #__s1 author="sam/claude-code" hat="security"}until it expires.
 ```
 
 Its changes to security's proposed text become its own suggestion on top. Its comment may overlap security's anchor:
@@ -36,10 +36,10 @@ Its changes to security's proposed text become its own suggestion on top. Its co
   "mode": "suggest",
   "group": "design review",
   "done": true,
-  "handoff": "Asked for a paragraph on the service-account option; widened s1 to cover D1.",
+  "handoff": "Asked for a paragraph on the service-account option; widened the in-memory suggestion to cover D1.",
   "items": [
-    {"edit":{"block":"sec:cache","old":"never in KV or logs","new":"never in KV, D1 or logs"}},
-    {"comment":{"block":"sec:keys","quote":"service account","body":"This option deserves its own paragraph: what would keyless signing cost us?"}}
+    {"edit":{"block":"cache","old":"never in KV or logs","new":"never in KV, D1 or logs"}},
+    {"comment":{"block":"keys","quote":"service account","body":"This option deserves its own paragraph: what would keyless signing cost us?"}}
   ]
 }
 ```
