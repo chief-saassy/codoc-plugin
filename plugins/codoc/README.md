@@ -34,13 +34,21 @@ Without the plugin, add the two parts yourself:
 1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect.
 2. **Skills:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` if you want it.
 
+## Update
+
+An agent tells you when a newer plugin is out. You can keep working until you update, unless the server refuses the agent's call with `outdated_plugin`.
+
+- **Claude Code:** run `/plugin`, update Codoc, then run `/reload-plugins`, or start a new session.
+- **claude.ai and the desktop app, with the plugin:** from the Add menu, open Manage marketplaces and check that it has synced the latest commit. Then update the plugin.
+- **claude.ai and the desktop app, with an uploaded skill:** zip `skills/codoc/` from this version and upload it again under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` if you use it.
+
 ## Self-hosting
 
 The plugin points at the hosted Codoc. For your own deployment, fork codoc-plugin and change the one `url` in `.mcp.json` to `https://<your domain>/mcp` (or `https://<your domain>/<base path>/mcp`), or add your endpoint as your own connector instead.
 
 ## Versioning
 
-The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told that the server expects a newer version stop and ask for an update. Anything else, such as a new skill, is a patch: installed plugins only receive a new version, and the agents on the last one keep working. Every patch also moves the version that `SKILL.md` names and the server's `LATEST_PLUGIN`, because every tool answer tells agents the latest version, and agents behind it encourage the user to update and carry on.
+The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told that the server expects a newer version stop and ask for an update. Anything else, such as a new skill, is a patch: installed plugins only receive a new version, and the agents on the last one keep working. Every patch also moves the version in the description and body of `SKILL.md` and the server's `LATEST_PLUGIN`, because every tool answer tells agents the latest version, and agents behind it encourage the user to update and carry on.
 
 ## Testing
 

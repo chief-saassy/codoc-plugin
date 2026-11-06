@@ -1,7 +1,7 @@
 {
   "name": "codoc",
   "displayName": "Codoc",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Review, comment on and suggest changes to Codoc documents from Claude: the Codoc MCP server, the skill that teaches its review workflow, and a skill for writing design documents.",
   "author": { "name": "Codoc" },
   "homepage": "https://codoc.sassysaas.cc",

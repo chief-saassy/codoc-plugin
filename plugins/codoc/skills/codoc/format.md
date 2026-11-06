@@ -163,7 +163,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `invalid_link` | Use an `http`, `https` or `mailto` address, `codoc:{docId}` / `codoc:{docId}#label` for a Codoc document, or `#label` here. For a block here, `[](#label){.live}` shows its number and `[words](#label)` is a link: a plain `[](#label)` is neither. |
 | `invalid_diagram` | A Mermaid diagram you wrote doesn't parse: fix the line in `details` (often a `;` in message text) and resend. See *Mermaid diagrams*. |
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
-| `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin (`/plugin` in Claude Code) and stop; don't work around it. |
+| `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin, as the error says, and stop; don't work around it. |
 | `misplaced_id` | A `{#…}` is where no id can go, and would show as text. Put it alone on the line directly above the block, on a list item's first line, or at the end of a heading. If your `old` stopped just before a heading's id, include the id in `old` and `new`. To show it as words, write `\{#`. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
 | `unread_comments` | Read the new comments before resolving. |
