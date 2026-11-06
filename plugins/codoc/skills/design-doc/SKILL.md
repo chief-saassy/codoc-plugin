@@ -39,7 +39,7 @@ Each of these is a design document in its own right. Every rule in this skill, a
 In this order. Name each section for what it says, so the headings differ from task to task.
 
 1. **The conclusion, on the first screen:** about 150 words straight after the title, with no heading of its own. The recommendation or main finding comes first, in plain words, including what is surprising and what looks wrong: "no single object holds this state". Then what needs the reader: decisions, risks, what can't be undone, what is unverified.
-2. **A diagram, if the document describes or changes a system.** At least a dependency diagram of about ten boxes, readable at a glance on a tablet. Merge boxes until it is. One or two diagrams in all.
+2. **A diagram, if the document describes or changes a system.** At least a dependency diagram of about ten boxes, readable at a glance on a tablet. Merge boxes until it is. Flowcharts run top to bottom (`flowchart TD`), not left to right, since a page is taller than it is wide. One or two diagrams in all.
 3. **The few things the reader needs.** Of many similar things, name those that matter and count the rest. For problems, the roots, with their symptoms as one line each. For a decision, the options with their real costs and your recommendation, written as open: the reader decides.
 4. **A last line naming what was left out,** so they can ask: "Left out: the retry states, the layout code. Ask for any of these." Details stay in the code or come on request, so this line is the only appendix.
 

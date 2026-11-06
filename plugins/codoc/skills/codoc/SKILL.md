@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.4.
+description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.5.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.4, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.5, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -94,7 +94,7 @@ It is standard Markdown, so write what you'd write in any Markdown file. There a
 | inline code: a path, a name, a command | backticks, `` `deploy/releases/v2/` ``. Bold and italics are `**…**` and `*…*` |
 | a link | `[the words](https://example.com/x)`. An address is `http`, `https`, `mailto` or `codoc:`. Another Codoc document is `[its title](codoc:{docId})`, a section of it `[section title](codoc:{docId}#label)`; keep the `codoc:` form you read |
 | a code block | a fence with its language, ```` ```ts ````. Keep every line to 100 characters or fewer, so it fits the page without scrolling sideways: wrap long lines, break a long command with `\` continuations, and shorten long literals |
-| a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. Give it its title in the text, a short line just above or below it, not inside the diagram. More in `format.md` |
+| a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. Prefer top to bottom (`flowchart TD`, not `LR`). Give it its title in the text, a short line just above or below it, not inside the diagram. More in `format.md` |
 | a chart | a ```` ```vega-lite ```` fence holding a Vega-Lite JSON spec, with its data written in `values` or `datasets`. Addresses (`url`), image marks and links are refused (`invalid_diagram`). Codoc draws it on its server, so **add the data up first** and include only what the chart draws: a chart can have up to 2,000 points and 200,000 characters of source, and anything bigger is refused. Limits and refused features are in `format.md` |
 
 A `{#` anywhere else is refused (`misplaced_id`), because it would show as text: `Text {#x}` is the mistake to avoid. To show the words, write `\{#`.
