@@ -1,6 +1,6 @@
 # Codoc plugin for Claude
 
-The Codoc MCP server plus the skill that teaches agents its review workflow.
+The Codoc MCP server, the skill that teaches agents its review workflow, and a skill for writing design documents.
 
 ```
 .claude-plugin/plugin.json   name, version
@@ -9,6 +9,7 @@ icon.png                     the Codoc logo, for a directory listing (plugin.jso
 skills/codoc/SKILL.md        the review workflow, read on every use
 skills/codoc/format.md       reference: agent Markdown, numbering attributes, results, failure codes
 skills/codoc/examples/       a worked round with a partial failure; a review by two hats
+skills/design-doc/SKILL.md   writing a design document a person will actually read
 ```
 
 Voice comments (dictating a comment with the microphone) are a web-app feature; agents work with the text that is posted.
@@ -31,7 +32,7 @@ After adding the plugin, open its Connectors tab, add the Codoc connector, and p
 Without the plugin, add the two parts yourself:
 
 1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect.
-2. **Skill:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills.
+2. **Skills:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` if you want it.
 
 ## Self-hosting
 
@@ -39,7 +40,7 @@ The plugin points at the hosted Codoc. For your own deployment, fork codoc-plugi
 
 ## Versioning
 
-The skill is versioned with the server. A change to the projection format or a tool signature bumps `version` in `plugin.json`, along with the `format_version` that `SKILL.md` names, which must match the server's agent format version.
+The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told of a different version stop and ask for an update, so anything else, such as a new skill, is a patch to `version` in `plugin.json` alone: installed plugins only receive a new version, and the agents on the last one keep working.
 
 ## Testing
 
