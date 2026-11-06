@@ -68,8 +68,11 @@ A ```` ```vega-lite ```` fence is drawn as a chart, by Codoc's server: readers g
 
 - **The source is one JSON object,** a Vega-Lite spec.
 - **Write the data in it:** `"data": {"values": [...]}`, or `"data": {"name": "sales"}` with `"datasets": {"sales": [...]}`. Include only what the chart draws, since readers can see it all in the source.
-- **Nothing can be fetched:** a `url` in any data or lookup, an `image` mark and `href` are all refused.
-- **A `sequence`** can generate up to 100,000 values, and the whole source can be up to 200,000 characters.
+- **Nothing can be fetched:** a `url` in any data or lookup, an `image` mark, `href`, and `url(...)` in a colour or font are all refused.
+- **Up to 2,000 points, and anything bigger is refused.** That counts every row in the source and every mark drawn, since a transform can make more. More than that isn't appropriate for a document, so add the data up first: send 12 monthly totals, not the 50,000 rows behind them.
+- **Limits:** a `sequence` can generate up to 2,000 values, the whole source can be up to 200,000 characters, width and height up to 5,000, `tickCount` and `maxbins` up to 1,000, density `steps` up to 10,000, and the drawn picture up to 5 MiB.
+- **If a chart is refused,** the error says why. Reduce the data, rather than trying to get round the limit.
+- **Expressions** can't use `sequence`, `pad`, `test`, `regexp` or `replace`, and data is JSON, not CSV.
 - **Leave colours and fonts out** unless they carry meaning: the app's theme is applied, in light and dark. Exports always use light.
 - **Title it in the text,** as for a diagram, in a short line just above or below the fence.
 
