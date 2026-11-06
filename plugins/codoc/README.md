@@ -40,7 +40,7 @@ The plugin points at the hosted Codoc. For your own deployment, fork codoc-plugi
 
 ## Versioning
 
-The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told of a different version stop and ask for an update, so anything else, such as a new skill, is a patch to `version` in `plugin.json` alone: installed plugins only receive a new version, and the agents on the last one keep working.
+The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told that the server expects a newer version stop and ask for an update. Anything else, such as a new skill, is a patch: installed plugins only receive a new version, and the agents on the last one keep working. Every patch also moves the version that `SKILL.md` names and the server's `LATEST_PLUGIN`, because every tool answer tells agents the latest version, and agents behind it encourage the user to update and carry on.
 
 ## Testing
 
