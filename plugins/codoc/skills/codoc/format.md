@@ -105,7 +105,7 @@ Comments carry no meaning. `## {#sec:x} <!-- empty -->` is not how to say a numb
 
 A new document's lists count `(a)`, `(i)`, `(A)` by depth unless the document or the list says otherwise. Never rely on this when you cite a number: the numbers come from the comments.
 
-A new block whose text starts with a typed number, such as `(a) ` or `5.1 `, is refused with `typed_number`, and so is a marker other than `1.`.
+A new block whose text starts with a typed number, such as `(a) `, `5.1 ` or `2. `, is refused with `typed_number`, and so is a marker other than `1.`. A plain number and a word is a sentence: `210 calls` is fine.
 
 ## `open_review` result
 
@@ -135,6 +135,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `invalid_link` | Use an `http`, `https` or `mailto` address, or `codoc:{docId}` / `codoc:{docId}#sec:label` for a Codoc document. |
 | `invalid_diagram` | A Mermaid diagram you wrote doesn't parse: fix the line in `details` (often a `;` in message text) and resend. See *Mermaid diagrams*. |
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
+| `misplaced_id` | A `{#…}` is where no id can go, and would show as text. Ids go at the end of a heading or straight after a list marker. If your `old` stopped just before a heading's id, include the id in `old` and `new`. To show it as words, write `\{#`. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
 | `unread_comments` | Read the new comments before resolving. |
 | `review_closed` | `open_review`, then resubmit. |
@@ -161,13 +162,15 @@ Markdown written elsewhere is turned into this first, and every change is listed
 | `[w](#a-heading)` | `@sec:a-heading`'s label | `anchor_to_ref` |
 | `[w](#nothing-here)` | `w` | `anchor_kept_as_text` |
 | `![alt](picture.png)` | a link to it (upload it to show it) | `image_kept_as_link` |
+| `12. text` or `2) text` alone, with no other items and no earlier list it carries on | a list starting at that number. In a draft of your own, write `1. ` unless you mean it | `lone_number_as_list` |
 | two spaces, `\` or `<br>` at a line's end | a space: a paragraph is one run of text | `line_break_joined` |
 | block quotes, footnotes, task boxes, raw HTML | kept as text | `kept_as_text` |
+| `{#…}` where no id can go | kept as text. In a draft of your own this is a mistake: fix it with an edit | `kept_as_text` |
 | HTML comments, `---` rules, YAML front matter | dropped | `dropped` |
 
-Also, without a report entry because nothing a reader sees changes: `1. 2. 3.` lists are read as numbered lists, `_x_` and `__x__` as `*x*` and `**x**`, `~~~` fences as ```` ``` ````, setext headings as `#`. Code is never touched.
+Also, without a report entry because nothing a reader sees changes: `1. 2. 3.` lists, or `4. 5. 6.`, are read as numbered lists starting where they say, `_x_` and `__x__` as `*x*` and `**x**`, `~~~` fences as ```` ``` ````, setext headings as `#`. Code is never touched.
 
-Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), a typed number at the start of a paragraph (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), a Mermaid diagram that doesn't parse (`invalid_diagram`, naming which diagram, the heading it is under and the line), `numbering="…"` naming no series (`invalid_attribute`), a `base_url` or `source.url` that isn't https (`invalid`), and more than 128 KiB of Markdown (`invalid`).
+Refused, with nothing created: CriticMarkup, suggestion tags, comment markers, block comments and thread lines (`markup_altered`), a typed number at the start of a paragraph, such as `(a) ` or `5.1 ` (`typed_number`), a reference to a block that isn't there (`unknown_ref`, with a did-you-mean), an image `src` never uploaded (`invalid_image`), a Mermaid diagram that doesn't parse (`invalid_diagram`, naming which diagram, the heading it is under and the line), `numbering="…"` naming no series (`invalid_attribute`), a `base_url` or `source.url` that isn't https (`invalid`), and more than 128 KiB of Markdown (`invalid`).
 
 ## `create_document` result
 
