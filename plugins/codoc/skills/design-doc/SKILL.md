@@ -15,8 +15,24 @@ Read the code, including how it fails, and what it does rather than what its com
 - **Budget**, at 500 words a page, diagrams not counted:
   - A decision or a small change: 1 page.
   - An ordinary design, or an existing system explained: 3 pages.
-  - Something large: say why it needs more, and split it by decision into separate documents.
+  - Something large: say why it needs more. If it would be too difficult to review at once, split it (see "Splitting a large design").
 - **Level:** the level the decision is made at. Usually that is components, what each is responsible for, and where state lives. Go lower only where the decision turns on the detail.
+
+## Splitting a large design
+
+A design stays in one document if a reviewer can get through it in one go, however many components it has. Split it when both of these hold after cutting:
+
+- It is still well over 3 pages, too much to review at once.
+- Its components can each be reviewed on their own, once the reader knows how they fit together.
+
+If its parts can't be understood apart, keep one document and say why it needs the length. If you split, tell the user why, and name the documents, in your message.
+
+The split has two levels:
+
+- **The master document** shows how the components fit together: the diagram, what each component is responsible for, where state lives, what passes between components, and the decisions that cross them. It links to each sub design and leaves the inside of each component to it.
+- **A sub design** holds the detail of one component, for a component the master can't cover in a few lines. It links to the master and states only what is particular to that component, linking to the master or a sibling for the rest.
+
+Each of these is a design document in its own right. Every rule in this skill, and every rule of the system it is written in, applies to each one separately: its own reader, budget from the list above, conclusion on the first screen, diagram, code links, "Left out" line and word count. The one difference: a reader of a sub design has the master too, so the two together must be enough to decide or start work.
 
 ## What the document holds
 
@@ -50,3 +66,5 @@ Count the words, leaving out diagrams. Over budget means cutting, not raising th
 ## In Codoc
 
 Use the `codoc` skill for the tools. Create the document with `create_document`, with a `request_key` and labels. Call `list_labels` first; a design note gets the design-note label (such as `dd`) and the project's label, where they exist. Diagrams are Mermaid code blocks with lines of 100 characters or fewer.
+
+For a split design, create the master first, then each sub design with a link to the master's `url` and the same labels, then edit the master to link to each sub design's `url`.
