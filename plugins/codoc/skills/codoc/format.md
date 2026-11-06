@@ -63,6 +63,16 @@ A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram a
 - A refusal names the diagram, the line (counted in the fence, from 1) and Mermaid's message; for an edit they are also in `details: {block, line, message}`. Fix that line and send the edit again. The rest of the batch still applies.
 - A diagram already in the document that doesn't parse (someone wrote it in the app, or it predates the check) is a warning, `{block, kind: "invalid-diagram", line, error, message}`, in `open_review` and `read_document`. Don't fix it unless it is yours or the user asks; tell them.
 
+
+A ```` ```vega-lite ```` fence is drawn as a chart, by Codoc's server: readers get a picture and the source, with no hover or other interaction. Codoc checks every chart an edit, a suggestion or `create_document` adds or changes, and refuses one that can't be drawn (`invalid_diagram`).
+
+- **The source is one JSON object,** a Vega-Lite spec.
+- **Write the data in it:** `"data": {"values": [...]}`, or `"data": {"name": "sales"}` with `"datasets": {"sales": [...]}`. Include only what the chart draws, since readers can see it all in the source.
+- **Nothing can be fetched:** a `url` in any data or lookup, an `image` mark and `href` are all refused.
+- **A `sequence`** can generate up to 100,000 values, and the whole source can be up to 200,000 characters.
+- **Leave colours and fonts out** unless they carry meaning: the app's theme is applied, in light and dark. Exports always use light.
+- **Title it in the text,** as for a diagram, in a short line just above or below the fence.
+
 ## Structure attributes
 
 Attributes go at the end of a heading line, on a list item's first line, and alone on the line directly above any other block. A new block needs a name only if something will refer to it: lowercase, unique, descriptive, and never starting `__`.

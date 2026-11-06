@@ -95,6 +95,7 @@ It is standard Markdown, so write what you'd write in any Markdown file. There a
 | a link | `[the words](https://example.com/x)`. An address is `http`, `https`, `mailto` or `codoc:`. Another Codoc document is `[its title](codoc:{docId})`, a section of it `[section title](codoc:{docId}#label)`; keep the `codoc:` form you read |
 | a code block | a fence with its language, ```` ```ts ````. Keep every line to 100 characters or fewer, so it fits the page without scrolling sideways: wrap long lines, break a long command with `\` continuations, and shorten long literals |
 | a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. Give it its title in the text, a short line just above or below it, not inside the diagram. More in `format.md` |
+| a chart | a ```` ```vega-lite ```` fence holding a Vega-Lite JSON spec, with its data written in `values` or `datasets`. Addresses (`url`), image marks and links are refused (`invalid_diagram`). Codoc draws it and shows the picture, so keep it small and include only the data the chart needs. More in `format.md` |
 
 A `{#` anywhere else is refused (`misplaced_id`), because it would show as text: `Text {#x}` is the mistake to avoid. To show the words, write `\{#`.
 
@@ -164,6 +165,10 @@ Documents should carry labels: they are how people find and filter documents. Wh
 ## Hats and groups
 
 A hat (`security`, lowercase, digits, hyphens) labels one reviewer. It is set once in `open_review` and carried by the review id. For several reviewers, open one review per hat, and have all of them pass the same `group`, named for the task. Comment on another hat's suggestions rather than deciding them.
+
+## Showing a chart in chat
+
+`draw_chart(doc, block, scheme?)` gets a picture of a chart. It comes as a PNG image beside the answer, so show the user that image. It's in the light scheme unless they ask for dark, and viewer access is enough. If the answer has `format: "svg"`, a PNG can't be made here: tell the user what `message` says.
 
 ## Exports
 
