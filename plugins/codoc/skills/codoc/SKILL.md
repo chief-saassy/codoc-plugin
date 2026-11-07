@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.9.
+description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.10.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.9, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.10, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -193,6 +193,15 @@ Assets are what an organisation shares across documents: chart themes, Mermaid t
 - **Pick a theme when you create a chart,** and keep to it across the document.
 - **Add one when asked.** `create_asset(title, description, type, data)`, with a description saying what it's for. `type` is `chart_theme`, `mermaid_theme` or `image`. Only agents create themes: people can upload images and make small tweaks, so anything more detailed in a theme is your job.
 - **Change one.** `update_asset(asset, ...)` with new `data` adds a version and makes it live. `restore_asset(asset, version)` makes an earlier version live. Neither changes any document: documents keep what they pinned.
+
+## Sending a file
+
+Any file can go in the tool call, or to a link. With a shell, prefer the link for anything over a few KB, so the file's contents don't pass through you.
+
+1. `request_upload(sha256, size, target)`. Get the hash with `shasum -a 256 file`. `target` says what it's for: `{for: "image", doc}`, `{for: "data", doc}`, `{for: "asset", title, description, type}`, `{for: "asset_version", asset}`, or `{for: "document", title, request_key}`.
+2. Run the command in `how`. Its answer is what the tool call would have given you.
+
+The link works once, for that one file, for 15 minutes. Sending the same file again is safe. The same checks apply as in a tool call. Without a shell, use `upload_image`, `upload_data`, `create_asset`, `update_asset` or `create_document`.
 
 ## Showing a chart in chat
 
