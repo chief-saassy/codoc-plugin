@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.12.
+description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.13.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.12, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.13, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -125,7 +125,7 @@ In suggest mode you can't change an existing line's level, depth, label or `form
 - If it is refused (`typed_number`, `unknown_ref`, `markup_altered`, `unknown_label`, `invalid_diagram`), nothing was made: fix what `message` says and send it again.
 - The result's `report` lists every change made to your text on the way in (labels given, links kept as text…). Read it; it is empty when you wrote Codoc's own Markdown with labels.
 - The result's `url` is safe to show the user: it opens the document for anyone who may read it, after they sign in. Give it to them. It is not `download_url`.
-- To add images, `upload_image` to the new document, then add them with an edit. To review the draft, `open_review` it like any other document.
+- To add images, send each to a link (*Sending a file*) or with `upload_image`, then add them with an edit. To review the draft, `open_review` it like any other document.
 
 ### Importing existing Markdown
 
@@ -220,12 +220,20 @@ Assets are what an organisation shares across documents: chart themes, Mermaid t
 
 ## Sending a file
 
-Any file can go in the tool call, or to a link. With a shell, prefer the link for anything over a few KB, so the file's contents don't pass through you.
+**Send files to a link, not in the tool call.** Whenever you can run commands, use the link for every file: an image, a chart's data, an asset, a Markdown file. The file goes straight from disk to Codoc, so its contents never pass through you, nothing is lost or garbled on the way, and it costs no context. Base64 in a tool call is the fallback, for when there is no shell or the link can't be reached.
 
-1. `request_upload(sha256, size, target)`. Get the hash with `shasum -a 256 file`. `target` says what it's for: `{for: "image", doc}`, `{for: "data", doc}`, `{for: "asset", title, description, type}`, `{for: "asset_version", asset}`, or `{for: "document", title, request_key}`.
+1. `request_upload(sha256, size, target)`. Get the hash with `shasum -a 256 file` and the size in bytes with `wc -c < file`. `target` says what it's for: `{for: "image", doc}`, `{for: "data", doc}`, `{for: "asset", title, description, type}`, `{for: "asset_version", asset}`, or `{for: "document", title, request_key}`.
 2. Run the command in `how`. Its answer is what the tool call would have given you.
 
-The link works once, for that one file, for 15 minutes. Sending the same file again is safe. The same checks apply as in a tool call. Without a shell, use `upload_image`, `upload_data`, `create_asset`, `update_asset` or `create_document`.
+The link works once, for that one file, for 15 minutes. Sending the same file again is safe. The same checks apply as in a tool call.
+
+**If the link can't be reached.** Some places you run in, such as Claude's code sandbox on claude.ai, block addresses they don't know: the command fails with an error from a proxy, or "host not allowed", rather than an answer from Codoc. Then send this file in the tool call (`upload_image`, `upload_data`, `create_asset`, `update_asset` or `create_document`), and tell the user once how to let links through, naming the address in `how` (its host, such as `codoc.sassysaas.cc`):
+
+- **claude.ai on a Team or Enterprise plan:** an organisation owner opens Organization settings, then Capabilities, then Code execution, chooses network egress to package managers and specific domains, and adds the host under the additional allowed domains.
+- **claude.ai on another plan:** look in Settings, then Capabilities, for the code execution network setting. If it offers no list of allowed domains, links can't be used there yet, and files go in the tool call.
+- **Claude Code:** a sandboxed shell takes the host in `sandbox.network.allowedDomains` in `settings.json`, and a cloud environment in its own custom network allowlist.
+
+Don't try to get around a block another way.
 
 ## Showing a chart in chat
 
