@@ -68,7 +68,7 @@ A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram a
 A ```` ```vega-lite ```` fence is drawn as a chart, by Codoc's server: readers get a picture and the source, with no hover or other interaction. Codoc checks every chart an edit, a suggestion or `create_document` adds or changes, and refuses one that can't be drawn (`invalid_diagram`).
 
 - **The source is one JSON object,** a Vega-Lite spec.
-- **Write the data in it:** `"data": {"values": [...]}`, or `"data": {"name": "sales"}` with `"datasets": {"sales": [...]}`. Include only what the chart draws, since readers can see it all in the source.
+- **Write the data in it:** `"data": {"values": [...]}`, or `"data": {"name": "sales"}` with `"datasets": {"sales": [...]}`. Include only what the chart draws, since readers can see it all in the source. Or keep it apart with `upload_data`, and write ```` ```vega-lite data.sales="<reference>" ```` with `"data": {"name": "sales"}`: see *A chart's data* in the skill.
 - **Nothing can be fetched:** a `url` in any data or lookup, an `image` mark, `href`, and `url(...)` in a colour or font are all refused.
 - **Up to 2,000 points, and anything bigger is refused.** That counts every row in the source and every mark drawn, since a transform can make more. More than that isn't appropriate for a document, so add the data up first: send 12 monthly totals, not the 50,000 rows behind them.
 - **Limits:** a `sequence` can generate up to 2,000 values, the whole source can be up to 200,000 characters, width and height up to 5,000, `tickCount` and `maxbins` up to 1,000, density `steps` up to 10,000, and the drawn picture up to 5 MiB.

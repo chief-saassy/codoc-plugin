@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.6.
+description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.7.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.6, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.7, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -166,6 +166,21 @@ Documents should carry labels: they are how people find and filter documents. Wh
 ## Hats and groups
 
 A hat (`security`, lowercase, digits, hyphens) labels one reviewer. It is set once in `open_review` and carried by the review id. For several reviewers, open one review per hat, and have all of them pass the same `group`, named for the task. Comment on another hat's suggestions rather than deciding them.
+
+## A chart's data
+
+Small data goes in the chart's source. For anything larger, `upload_data(doc, data)` takes a JSON array of up to 2,000 row objects and answers a `reference`. Put it on the fence line, and name the data in the source:
+
+````
+```vega-lite data.sales="codoc-blob:sha256-…"
+{"data": {"name": "sales"}, "mark": "bar", "encoding": {…}}
+```
+````
+
+- **This isn't a data store.** Upload only the rows the chart needs, added up first. Readers never get the file, but anyone who can read the document can copy the chart and draw its other columns.
+- **A reference works only in the document it was issued for,** and every save checks it (`invalid_reference`). Copy it exactly, and leave it alone when editing the source.
+- **To use new data,** upload it and replace the reference in one edit, along with any source changes it needs. This can't be a suggestion yet, so in suggest mode, say so in a comment.
+- **To copy a chart to another document,** use `copy_chart(from_doc, block, to_doc)` and put its `markdown` in the other document with an edit. A new document can't start with a reference: create it first.
 
 ## Showing a chart in chat
 
