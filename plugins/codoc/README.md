@@ -1,6 +1,6 @@
 # Codoc plugin for Claude
 
-The Codoc MCP server, the skill that teaches agents its review workflow, and a skill for writing design documents.
+The Codoc MCP server, the skill that teaches agents its review workflow, and skills for writing PRDs and design documents.
 
 ```
 .claude-plugin/plugin.json   name, version
@@ -10,6 +10,7 @@ skills/codoc/SKILL.md        the review workflow, read on every use
 skills/codoc/format.md       reference: agent Markdown, numbering attributes, results, failure codes
 skills/codoc/examples/       a worked round with a partial failure; a review by two hats
 skills/design-doc/SKILL.md   writing a design document a person will actually read
+skills/prd/SKILL.md          writing a PRD, with mocks, before the design of important functionality
 ```
 
 Voice comments (dictating a comment with the microphone) are a web-app feature; agents work with the text that is posted.
@@ -32,7 +33,7 @@ After adding the plugin, open its Connectors tab, add the Codoc connector, and p
 Without the plugin, add the two parts yourself:
 
 1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect.
-2. **Skills:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` if you want it.
+2. **Skills:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` and `skills/prd/` if you want them.
 
 ## Update
 
@@ -40,7 +41,7 @@ An agent tells you when a newer plugin is out. You can keep working until you up
 
 - **Claude Code:** run `/plugin`, update Codoc, then run `/reload-plugins`, or start a new session.
 - **claude.ai and the desktop app, with the plugin:** from the Add menu, open Manage marketplaces and check that it has synced the latest commit. Then update the plugin.
-- **claude.ai and the desktop app, with an uploaded skill:** zip `skills/codoc/` from this version and upload it again under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` if you use it.
+- **claude.ai and the desktop app, with an uploaded skill:** zip `skills/codoc/` from this version and upload it again under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` and `skills/prd/` if you use them.
 
 ## Self-hosting
 
