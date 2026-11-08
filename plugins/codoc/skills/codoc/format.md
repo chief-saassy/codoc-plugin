@@ -163,7 +163,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 
 | code | do |
 |---|---|
-| `old_not_found` | Read `block_now`. If someone changed the text, redo your edit on it and keep their words. |
+| `old_not_found` | Read `block_now`. If the reason says the text is in another block, name that one. If someone changed the text, redo your edit on it and keep their words. |
 | `old_ambiguous` | Add surrounding words. |
 | `markup_altered` | You changed a suggestion span or a comment marker. Copy them as they are, or choose an `old` that avoids them. |
 | `invalid_link` | Use an `http`, `https` or `mailto` address, `codoc:{docId}` / `codoc:{docId}#label` for a Codoc document, or `#label` here. For a block here, `[](#label){.live}` shows its number and `[words](#label)` is a link: a plain `[](#label)` is neither. |
@@ -171,6 +171,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
 | `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin, as the error says, and stop; don't work around it. |
 | `misplaced_id` | A `{#…}` is where no id can go, and would show as text. Put it alone on the line directly above the block, on a list item's first line, or at the end of a heading. If your `old` stopped just before a heading's id, include the id in `old` and `new`. To show it as words, write `\{#`. |
+| `misplaced_attributes` | A `{…}` line has nothing under it to describe, and would show as text. Put it directly above its block, or on a list item's first line. To delete a block, send its `block` with `text: ""`. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
 | `tick_in_suggestion` | A suggestion can add a box, `[ ]`, but not tick it. Write `[ ]`; the reader ticks it. |
 | `tick_on_proposed` | That item is proposed by a pending suggestion, so its box can't change in an edit. Leave it until the suggestion is accepted. |
