@@ -21,7 +21,7 @@ Important functionality people will see (a new screen, menu or flow, a new kind 
 
 The design document then covers how it is built: components, where state lives, data and events, what passes between components, who may read and write each new piece of data and what enforces it, races, migration, risks and tests. It doesn't repeat the PRD's behaviour, mocks or reasons; it links to them. Where the build forces a change to what people see, raise it against the PRD and change the PRD, so the two never disagree.
 
-**They link to each other.** The design document's first line, before the conclusion, is "PRD: [its title](its url)", and the PRD gets "Design: [this title](this url)" after its conclusion. Keep both links when either is revised.
+**They link to each other.** The design document's first line under its Summary heading is "PRD: [its title](its url)", and the PRD gets "Design: [this title](this url)" after its summary. Keep both links when either is revised.
 
 A fix, a small change, or work people don't see needs no PRD.
 
@@ -50,13 +50,13 @@ The split has two levels:
 - **The master document** shows how the components fit together: the diagram, what each component is responsible for, where state lives, what passes between components, and the decisions that cross them. It links to each sub design and leaves the inside of each component to it.
 - **A sub design** holds the detail of one component, for a component the master can't cover in a few lines. It links to the master and states only what is particular to that component, linking to the master or a sibling for the rest.
 
-Each of these is a design document in its own right. Every rule in this skill, and every rule of the system it is written in, applies to each one separately: its own reader, size from the list above, conclusion on the first screen, diagram, code links, PRD link and "Left out" line. The one difference: a reader of a sub design has the master too, so the two together must be enough to decide or start work.
+Each of these is a design document in its own right. Every rule in this skill, and every rule of the system it is written in, applies to each one separately: its own reader, size from the list above, summary on the first screen, diagram, code links, PRD link and "Left out" line. The one difference: a reader of a sub design has the master too, so the two together must be enough to decide or start work.
 
 ## What the document holds
 
 In this order. Name each section for what it says, so the headings differ from task to task.
 
-1. **The conclusion, on the first screen:** about 150 words straight after the title, with no heading of its own. The recommendation or main finding comes first, in plain words, including what is surprising and what looks wrong: "no single object holds this state". Then what needs the reader: decisions, risks, what can't be undone, what is unverified.
+1. **The summary, on the first screen:** about 150 words under a heading of its own, such as `# Summary`: a document never opens with a bare paragraph. The recommendation or main finding comes first, in plain words, including what is surprising and what looks wrong: "no single object holds this state". Then what needs the reader: how many decisions wait (each in its own section, below), risks, what can't be undone, what is unverified.
 2. **A diagram, if the document describes or changes a system.** At least a dependency diagram of about ten boxes, readable at a glance on a tablet. Merge boxes until it is. Flowcharts run top to bottom (`flowchart TD`), not left to right, since a page is taller than it is wide. One or two diagrams in all.
 3. **The few things the reader needs.** Of many similar things, name those that matter and count the rest. For problems, the roots, with their symptoms as one line each. For a decision, the options with their real costs and your recommendation, written as open: the reader decides. For a design, name the one or two other ways a reviewer would expect it built, and why not, a line each. For new data, who may read and write it, and what enforces that (access rules, a server check), including any rule change and how it is deployed.
 4. **A last line naming what was left out,** so they can ask: "Left out: the retry states, the layout code. Ask for any of these." Details stay in the code or come on request, so this line is the only appendix.
@@ -65,7 +65,7 @@ Stay long enough to be used: someone must be able to decide or start work from t
 
 ## Decisions are tick boxes
 
-Each decision the reader must make is written as a question in plain words, then your recommendation and why: by default one answer, not a menu of options (name an alternative only where the reader needs it to judge yours). Under each, on its own, an unticked `Approve` box. They sit where the conclusion says what needs the reader, so they can approve from the first screen:
+Each decision the reader must make is written as a question in plain words, then your recommendation and why: by default one answer, not a menu of options (name an alternative only where the reader needs it to judge yours). Under each, on its own, an unticked `Approve` box. Each decision sits in the section it decides, straight after the information it depends on, so the reader approves once they have read what is being done. Never gather them in the summary:
 
 ```markdown
 - **Undo outside Editing.** Keep ticks in the one undo history, and let the page pass Ctrl+Z on in Commenting. A separate record of ticks would be a second undo system for no gain.
@@ -113,7 +113,7 @@ For each section, ask whether the reader's decision would change without it, and
 Then have a fresh reader review the document, and finish that review yourself, so the user gets a finished document and only the questions that are truly theirs.
 
 1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url (and the PRD's, if there is one) and this brief: read it as the builder who must plan the work from it, checking its claims in the code; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter, and on each claim the code doesn't bear out; nothing you could settle yourself, and no wording nitpicks.
-2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(builder's call)*. Then reply saying what you changed, and resolve the thread: this skill asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and list it in the conclusion.
+2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(builder's call)*. Then reply saying what you changed, and resolve the thread: this skill asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and give it a decision with an Approve box there.
 3. **Send the reader back** (the same subagent, whose agenda shows your replies and changes) until it leaves no new comment, at most three rounds.
 4. **Hand over** with the open questions, each linked to its comment. Never hand over with a reader's comment unanswered.
 

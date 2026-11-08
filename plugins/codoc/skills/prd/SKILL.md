@@ -31,7 +31,7 @@ Find out what the user wants and why: the moment they wish it existed, who else 
 
 In this order. Name each section for what it says.
 
-1. **The conclusion, on the first screen:** a short paragraph straight after the title, with no heading. What people get, in plain words, and why it matters to them. Then what needs the reader: the calls you made that they should check, and the questions only they can answer.
+1. **The summary, on the first screen,** under a heading of its own, such as `# Summary`: a document never opens with a bare paragraph. What people get, in plain words, and why it matters to them. Then how many decisions wait for the reader, each a tick box in the section it is about (*Decisions are tick boxes*).
 2. **Who and when:** one or two concrete scenarios in the user's own terms ("a contract goes out as V1, comes back with redlines, and goes out again as V2"). Name the people involved and what each may do.
 3. **What it does, as people meet it:** each flow from where it starts to what they see after. Every rule they will run into (who may, when it is refused, limits) and what a refusal says.
 4. **The states off the happy path:** what people see when there is nothing yet, when there are very many, when they are offline or it is slow, and when someone else changes or removes the thing while they look. Leave out those that can't happen.
@@ -40,11 +40,11 @@ In this order. Name each section for what it says.
 7. **How we'll know it works:** the scenarios as checks a person could run in the product.
 8. **A last line naming what was left out,** so the reader can ask.
 
-Mark who decided what: *(owner)* for the user's decisions, *(writer's call)* for yours, so the reader can check yours. Where a question is still unsettled, mark it *(open)* where it comes up, as well as listing it in the conclusion.
+Mark who decided what: *(owner)* for the user's decisions, *(writer's call)* for yours, so the reader can check yours. Where a question is still unsettled, mark it *(open)* where it comes up, with its decision there.
 
 ## Decisions are tick boxes
 
-Each question only the reader can answer, and each call of yours they should check, is written in plain words with your recommendation and why: by default one answer, not a menu of options. Under each, on its own, an unticked `Approve` box. They sit in the conclusion, each linked to where it comes up:
+Each question only the reader can answer, and each call of yours they should check, is written in plain words with your recommendation and why: by default one answer, not a menu of options. Under each, on its own, an unticked `Approve` box. Each decision sits in the section it decides, straight after the information it depends on, so the reader approves once they have read what is being done. Never gather them in the summary:
 
 ```markdown
 - **Undo outside Editing.** Keep ticks in the one undo history, and let the page pass Ctrl+Z on in Commenting. A separate record of ticks would be a second undo system for no gain.
@@ -84,7 +84,7 @@ Be concise, but never leave out an important part of what the feature does: comp
 Before handing over, have a fresh reader review the PRD, and finish that review yourself, so the user gets a finished document and only the questions that are truly theirs.
 
 1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url and this brief: read it as the person who must approve it, and as the builder who must design from it; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter; nothing you could settle yourself, and no wording nitpicks.
-2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(writer's call)*. Then reply saying what you changed, and resolve the thread: this skill asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and list it in the conclusion.
+2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(writer's call)*. Then reply saying what you changed, and resolve the thread: this skill asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and give it a decision with an Approve box there.
 3. **Send the reader back** (the same subagent, whose agenda shows your replies and changes) until it leaves no new comment, at most three rounds.
 4. **Hand over** with the open questions, each linked to its comment. Never hand over with a reader's comment unanswered.
 
@@ -94,4 +94,4 @@ Skip the check only for a one-page change the user asked for in a hurry.
 
 Use the `codoc` skill for the tools. Create the document with `create_document`, with a `request_key` and labels. Call `list_labels` first; a PRD gets the PRD label (such as `prd`) and the project's label, where they exist. Add each mock to the document as an image (*Sending a file* in the `codoc` skill), then put it in place with an edit.
 
-**A PRD and its design documents link to each other.** When a design document is written, add a link to it on the line after the PRD's conclusion ("Design: [its title](its url)"), and the design document links back the same way. A PRD with several design documents links to each one. Keep the links when either is revised.
+**A PRD and its design documents link to each other.** When a design document is written, add a link to it on the line after the PRD's summary ("Design: [its title](its url)"), and the design document links back the same way. A PRD with several design documents links to each one. Keep the links when either is revised.
