@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.16.
+description: Use when creating, renaming, trashing, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, open_review, submit_review, the label tools). This is plugin version 0.2.17.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.16, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.17, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -149,6 +149,16 @@ When the user asks to bring in a Markdown file (a README, a design doc from GitH
 - **You never delete.** Deleting forever is the owner's, in the app, from the Trash, and can't be undone. If the user asks you to delete a document, trash it and tell them it is in the Trash, where they can delete it forever.
 - A document in the Trash is read-only: `open_review`, edits, comments and renames answer `trashed`. `read_document` and `export` still work. Restore it first only if the user wants it changed.
 - `list_documents` leaves the Trash out. To see what is there, `list_documents(labelIds: ["trash"])`. The Trash is a built-in label: `set_labels` can't add or remove it.
+
+## Temp documents
+
+A temp document carries the built-in Temp label (`temp`). It is the user's alone and can't be shared, it is left out of their list, and a nightly cleanup moves it to the Trash some days after its last change (`temp.due` in the answer says when). Removing the label keeps it as a normal document.
+
+- **Make one** with `create_document(…, temp: true)`, for work the person needs to see once: a comparison, an analysis or summary to read and discard, a preview of something not yet asked for, something to show them in a window, or a document made for testing. And whenever they say scratch, throwaway or temp.
+- **Don't** for anything they asked you to write, draft or keep, for anything others will review (a PRD, a design, a contract), or for anything to be shared.
+- **When unsure, ask** whether it should be temp.
+- **Say so:** tell them it is temp, when it goes, and that removing the Temp label keeps it.
+- `list_documents` leaves temp documents out: pass `include_temp: true`, or `labelIds: ["temp"]` for only those. Only the owner adds or removes Temp with `set_labels`, and only on a document shared with nobody (`shared` otherwise). Never share a temp document.
 
 ## Labels
 
