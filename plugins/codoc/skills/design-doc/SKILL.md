@@ -63,6 +63,31 @@ In this order. Name each section for what it says, so the headings differ from t
 
 Stay long enough to be used: someone must be able to decide or start work from this alone.
 
+## Decisions are tick boxes
+
+Each decision the reader must make is written as a question in plain words, then your recommendation and why: by default one answer, not a menu of options (name an alternative only where the reader needs it to judge yours). Under each, on its own, an unticked `Approve` box. They sit where the conclusion says what needs the reader, so they can approve from the first screen:
+
+```markdown
+- **Undo outside Editing.** Keep ticks in the one undo history, and let the page pass Ctrl+Z on in Commenting. A separate record of ticks would be a second undo system for no gain.
+
+  - [ ] Approve
+```
+
+When the owner really has to choose (two answers are each reasonable and it turns on their preference, or the question asks for a pick), give the options as unticked boxes instead, with a line saying what to tick, and mark the one you recommend:
+
+```markdown
+- **Where the Approve box goes.** Tick one:
+
+  - [ ] Under each question *(recommended: each can be approved on its own)*
+  - [ ] Once, for the whole document
+```
+
+Use whichever fits what is being asked; most questions have one good answer and get `Approve`.
+
+- Never tick one yourself. The reader ticks to approve your recommendation or to make their choice, and comments to disagree or to answer differently.
+- On a later round, a ticked question is settled: don't reopen it, and build on it as approved.
+- If a change you make alters what an approved question says, untick its ticked box in the same edit and say why in a comment, so the reader approves it again. In suggest mode you can't untick: say in a comment that the approval needs another look.
+
 ## Claims
 
 The claims the argument rests on link to the code, about four links a page, with the code's name as the link text:
@@ -76,6 +101,8 @@ What you read in the code is stated plainly. Mark the rest where it appears: "in
 ## Revising
 
 After feedback, cut as well as add, so the document stays as easy to read as the first draft.
+
+Once the user has approved the document, the design can still change, most often when building turns up something it didn't foresee. When it does, ask yourself whether the change needs the user's approval before you build on it. A change to what is built or how does; wording that changes nothing built doesn't. *(builder's call)* is for choices the approved design leaves open, never a way around that approval.
 
 ## Before handing over
 

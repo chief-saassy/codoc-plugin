@@ -42,6 +42,35 @@ In this order. Name each section for what it says.
 
 Mark who decided what: *(owner)* for the user's decisions, *(writer's call)* for yours, so the reader can check yours. Where a question is still unsettled, mark it *(open)* where it comes up, as well as listing it in the conclusion.
 
+## Decisions are tick boxes
+
+Each question only the reader can answer, and each call of yours they should check, is written in plain words with your recommendation and why: by default one answer, not a menu of options. Under each, on its own, an unticked `Approve` box. They sit in the conclusion, each linked to where it comes up:
+
+```markdown
+- **Undo outside Editing.** Keep ticks in the one undo history, and let the page pass Ctrl+Z on in Commenting. A separate record of ticks would be a second undo system for no gain.
+
+  - [ ] Approve
+```
+
+When the owner really has to choose (two answers are each reasonable and it turns on their preference, or the question asks for a pick), give the options as unticked boxes instead, with a line saying what to tick, and mark the one you recommend:
+
+```markdown
+- **Where the Approve box goes.** Tick one:
+
+  - [ ] Under each question *(recommended: each can be approved on its own)*
+  - [ ] Once, for the whole document
+```
+
+Use whichever fits what is being asked; most questions have one good answer and get `Approve`.
+
+- Never tick one yourself. The reader ticks to approve your recommendation or to make their choice, and comments to disagree or to answer differently.
+- On a later round, a ticked question is settled: don't reopen it, and build on it as approved.
+- If a change you make alters what an approved question says, untick its ticked box in the same edit and say why in a comment, so the reader approves it again. In suggest mode you can't untick: say in a comment that the approval needs another look.
+
+## Revising
+
+Once the user has approved the PRD, it can still change, most often when designing or building turns up something it didn't foresee. When it does, ask yourself whether the change needs the user's approval before the work goes on. A change to what people get does; wording that changes nothing they get doesn't. *(writer's call)* is for choices the approved PRD leaves open, never a way around that approval.
+
 ## Keep it plain
 
 Say what isn't obvious and stop. A mock carries no more words than the real screen would: a dialog that only asks for a name shows only the field. Words on screen are written as they will read. Spell out what people could lose or be surprised by (what happens to their work, whether it can be undone), and leave out what anyone would assume.

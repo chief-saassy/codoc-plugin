@@ -82,6 +82,8 @@ Attributes go at the end of a heading line, on a list item's first line, and alo
 | `start=3` | item | the list starts at 3 |
 | `.continue` | item | carry on from the previous list, instead of restarting |
 | `depth=2` | paragraph | the list depth its text lines up with, where indentation can't say |
+
+A list item can have a tick box: `- [ ] the text`, ticked `- [x] the text`, and `1. [ ] the text` on a numbered item. The box goes straight after the marker and before any attributes: `1. [ ] {#pay format="(a)"}`. Text that starts with brackets is escaped, `\[ ]`, so it stays words. Ticking and unticking are edits, never suggestions.
 | `.empty` | alone, then a blank line | an empty paragraph: `{.empty}`, or `{#x .empty}` to name it |
 
 An image's caption is the lines after it, up to a blank line, and its name goes on the line above.
@@ -170,6 +172,8 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin, as the error says, and stop; don't work around it. |
 | `misplaced_id` | A `{#…}` is where no id can go, and would show as text. Put it alone on the line directly above the block, on a list item's first line, or at the end of a heading. If your `old` stopped just before a heading's id, include the id in `old` and `new`. To show it as words, write `\{#`. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
+| `tick_in_suggestion` | A suggestion can add a box, `[ ]`, but not tick it. Write `[ ]`; the reader ticks it. |
+| `tick_on_proposed` | That item is proposed by a pending suggestion, so its box can't change in an edit. Leave it until the suggestion is accepted. |
 | `unread_comments` | Read the new comments before resolving. |
 | `review_closed` | `open_review`, then resubmit. |
 
