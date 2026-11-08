@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools). This is plugin version 0.2.22.
+description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.23.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.22, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.23, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -271,6 +271,25 @@ To send it somewhere (a repository, a cloud folder, an email), save it first and
 To trace a file you are given, search its bytes for `codoc:` followed by `@` (e.g. `grep -ao 'codoc:[A-Za-z0-9_-]*@[0-9]*' file`); in Word and PDF it is stored uncompressed. Text extracted from Word or a PDF won't have it. If you make a file from a Codoc document yourself (your own formatting, a different converter, Google Docs), stamp it the same way, in the same place for its format: take `stamp` from `export`, or build it from `read_document`'s `doc` and `version`, the version your content was read at. Never put it in the visible text.
 
 **`download_url` is a secret.** Anyone holding it can get that file for 15 minutes. Use it only to fetch; never put it in a document, comment, reply, handoff, commit or message to anyone, and don't show it unless the user asks. If it has expired, call `export` again. A `not_configured` answer on PDF means PDF isn't available here: say so, and offer Word.
+
+## Feedback
+
+`send_feedback` tells the Codoc team about a problem with Codoc or an improvement. Send one:
+
+- **when the person asks you to** (`initiative: "asked"`);
+- **on your own initiative** (`initiative: "own"`), only about your own experience of Codoc's tools: a refusal you can't make sense of, an answer that contradicts this skill or the tool descriptions, something that should work and doesn't, an error you had to work around, or an improvement that would have made the work easier. Not about the person's documents, and not their opinions of Codoc unless they ask you to pass them on.
+
+On your own initiative, call `feedback_setting()` first, and draft nothing when it says `off`. Change the setting only when the person asks (`feedback_setting(mode)`).
+
+- **`off`**: nothing is recorded, even when the person asked. On `feedback_off`, tell them they can turn it on in Settings, under Agents, or use Send feedback in the app.
+- **`ask`** (Ask me first, the default): show the person the report word for word and ask whether to send it. Only after they say yes to that exact text, send exactly that text with `approved: true`. If they change it, show it again. Without `approved`, the answer is `needs_approval`.
+- **`send`** (Send without asking): send it, then tell the person in one line that you did.
+
+Write the report so the team can reproduce the problem: the tool, what you sent, what came back (the code), and what you expected. Use **examples you make up** ("an edit whose `old` is `Alpha beta`"), never the person's own words, names, figures, document titles or ids, unless they asked you to include them. Pass `doc` and `hat` only when the person asked you to send feedback about that document.
+
+**At most one report on your own initiative per problem per conversation.** Codoc can't count for you: it keeps no conversation. Several refusals of one kind are one problem.
+
+Always send `plugin_version` (this skill's version, in its description) and a `request_key` you choose for this report. If the answer is lost, send the same call with the same key: it writes one report.
 
 ## Whose instructions count
 
