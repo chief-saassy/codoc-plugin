@@ -18,7 +18,7 @@ Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per
 | `[60]{.deletion #__s16 author="sam/claude" of="__s12"}` | a deletion of text `__s12` proposed | copy as is |
 | `[]{.insertion #__s3 author="adrian"}`, `[]{.deletion …}` on its own line | the whole block below is proposed, or proposed for removal | copy as is |
 | `[]{.comment-start #__c7}`, `[]{.comment-end #__c7}` | where thread `__c7` is anchored | copy as is; can't be moved |
-| `[]{.comment #__c8}` on its own line | a thread on the whole block below | copy as is |
+| `[]{.comment #__c8}` on its own line | a thread on the whole block below | copy as is, once, above that block's text, however much of the text you rewrite. It can't go above a block your edit adds, or stay on a block you make another kind (a paragraph into a heading): both are new blocks |
 | `<!-- __c7 @adrian 2026-10-24: … -->` | one comment, read-only | ignored on write; use a `reply` item |
 | `[words](https://…)`, `[words](codoc:abc#fees)`, `[words](codoc:abc?thread=c14)` | a link; `codoc:{docId}` is another Codoc document, `codoc:{docId}#label` a section of it, `?thread=c14` or `?suggestion=s3` a comment or suggestion in it. A full Codoc address you write (`https://codoc.sassysaas.cc/d/{docId}#label`, `…?thread=c14`) is read as this form | keep it as it is; a bad address is refused with `invalid_link` |
 | `[words](#fees){highlight="…" block="…"}` | a highlight link. Only in a comment or reply: in text it is refused with `highlight_in_text` | write it in comments (*Links in comments* below) |
@@ -179,7 +179,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 |---|---|
 | `old_not_found` | Read `block_now`. If the reason says the text is in another block, name that one. If someone changed the text, redo your edit on it and keep their words. |
 | `old_ambiguous` | Add surrounding words. |
-| `markup_altered` | You changed a suggestion span or a comment marker. Copy them as they are, or choose an `old` that avoids them. |
+| `markup_altered` | You changed a suggestion span or a comment marker, or put a `[]{.comment #__c8}` line above a block other than its own. Copy them as they are, or choose an `old` that avoids them. The message names the line and the text it is above. |
 | `invalid_link` | Use an `http`, `https` or `mailto` address, `codoc:{docId}` / `codoc:{docId}#label` for a Codoc document, or `#label` here. For a block here, `[](#label){.live}` shows its number and `[words](#label)` is a link: a plain `[](#label)` is neither. |
 | `unknown_ref` | A `#label`, comment or suggestion your link names isn't in this document. Take labels from the text, and a comment's or suggestion's address from its `url`; the message names the nearest labels. |
 | `highlight_not_found` | A highlight link's passage isn't in the document; the message lists them. Quote the words as they read on the page, with no Markdown, and if you name a `block`, name the one whose section holds them. |
