@@ -20,7 +20,8 @@ Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per
 | `[]{.comment-start #__c7}`, `[]{.comment-end #__c7}` | where thread `__c7` is anchored | copy as is; can't be moved |
 | `[]{.comment #__c8}` on its own line | a thread on the whole block below | copy as is |
 | `<!-- __c7 @adrian 2026-10-24: … -->` | one comment, read-only | ignored on write; use a `reply` item |
-| `[words](https://…)`, `[words](codoc:abc#fees)` | a link; `codoc:{docId}` is another Codoc document, `codoc:{docId}#label` a section of it | keep it as it is; a bad address is refused with `invalid_link` |
+| `[words](https://…)`, `[words](codoc:abc#fees)`, `[words](codoc:abc?thread=c14)` | a link; `codoc:{docId}` is another Codoc document, `codoc:{docId}#label` a section of it, `?thread=c14` or `?suggestion=s3` a comment or suggestion in it. A full Codoc address you write (`https://codoc.sassysaas.cc/d/{docId}#label`, `…?thread=c14`) is read as this form | keep it as it is; a bad address is refused with `invalid_link` |
+| `[words](#fees){highlight="…" block="…"}` | a highlight link. Only in a comment or reply: in text it is refused with `highlight_in_text` | write it in comments (*Links in comments* below) |
 | `[words][label]`, `[words][]`, `[words]`, with `[label]: https://…` on a line of its own in the same text | a reference link, read as `[words](https://…)`; the definition line gives no block, and labels ignore case | write one when it reads better, with its definition in the same edit, after a blank line. You read it back as `[words](https://…)`. Brackets with no definition stay words |
 | `` `RELEASE_VERSION` ``, ``` `` a ` b `` ``` | inline code: a file path, a name, a command | write it with backticks, as in any Markdown. Inside, nothing is formatting and backslashes are text, except `\|` in a table |
 | `\*`, `\{`, `\$`, `` \` `` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
@@ -28,6 +29,18 @@ Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per
 A span's `author` reads `user`, then `/client` for anything but the web editor, and `hat="security"` if it has one. Decided suggestions and resolved threads aren't shown; `thread(doc, thread)` has their history. In tool results ids are spelled `__c7` and `__s12`; in tool parameters `c7` and `__c7` both work. Each comment and suggestion also has a `url`, which is what you give a person.
 
 Only this format is read. The older forms (`{#sec:x}`, `@sec:x`, `block: "sec:x"`, `thread: "c7"`, CriticMarkup) are refused with `outdated_plugin`.
+
+## Links in comments
+
+A comment or reply shows no Markdown but links. `[words](#label)` is a place in this document, `[words](codoc:{docId})`, `(codoc:{docId}#label)` and `(codoc:{docId}?thread=c14)` are as in text, `[words](https://…)` goes out, a bare `https://` address is a link to itself, and `[words]($e1)` cites an earlier item in the batch. A Codoc address is read as its `codoc:` form. A `#label`, comment or suggestion of this document that isn't there is refused `unknown_ref`.
+
+A highlight link adds `{…}` straight after the `)`, with no space: `[words](place){highlight="…" block="…" highlight="…"}`.
+
+- `place` is `#label`, `codoc:{docId}#label` or `codoc:{docId}`, never a comment, a suggestion or a web address.
+- Each `highlight="…"` starts a passage: its words as they read on the page, with no Markdown. A `block="…"` straight after it names the block whose section holds it; a `block` anywhere else is refused. These are `show`'s `quote` and `block`.
+- A passage with a `block` is looked for only in that section; one without, in the place's section first and then the whole document. The first match counts.
+- Up to 10 passages, none blank. Inside a value, `\"` is a quote and `\\` a backslash.
+- Each passage in this document must be in the text as it stands after the earlier items of the batch, pending suggestions' text included, or the item fails `highlight_not_found`, listing the missing ones. Passages in another document are looked for only when the link is followed. A `{…}` that says `highlight=` and breaks these rules is refused `invalid_link`, with why.
 
 ## Changing text that already carries suggestions
 
@@ -160,7 +173,7 @@ The agenda covers what is new since your last clean submit; a partial failure br
 
 `version`, `results: [{key?, index, status, created?, urls?, reason?, code?, block_now?, details?, note?}]`, `changed: {ref: markdown}` (with `numbering` when the numbering block changed), `also_changed?: {ref: markdown}`, `also_changed_since?`, `warnings`, `notes?`.
 
-Use `changed` and `also_changed` as your current text. `warnings` lists problems your change introduced, such as a dangling reference (`dangling-ref`) or a diagram that doesn't parse (`invalid-diagram`); the change still applied, so fix them yourself, in this round or the next. The `warnings` of `open_review` and `read_document` are every current problem, `{block, kind, target?, line?, error?, message}`: tell the user about those you didn't cause, and leave them unless asked. Common failure codes:
+Use `changed` and `also_changed` as your current text. `warnings` lists problems your change introduced, such as a dangling reference (`dangling-ref`), a diagram that doesn't parse (`invalid-diagram`), or a number the document shows typed as words, such as "Section 4.1" (`number_in_words`, whose `message` says which `[](#label){.live}` to write, or `[words](#label)` in a comment); the change still applied, so fix them yourself, in this round or the next. The `warnings` of `open_review` and `read_document` are every current problem, `{block, kind, target?, line?, error?, message}`: tell the user about those you didn't cause, and leave them unless asked. Common failure codes:
 
 | code | do |
 |---|---|
@@ -168,6 +181,9 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `old_ambiguous` | Add surrounding words. |
 | `markup_altered` | You changed a suggestion span or a comment marker. Copy them as they are, or choose an `old` that avoids them. |
 | `invalid_link` | Use an `http`, `https` or `mailto` address, `codoc:{docId}` / `codoc:{docId}#label` for a Codoc document, or `#label` here. For a block here, `[](#label){.live}` shows its number and `[words](#label)` is a link: a plain `[](#label)` is neither. |
+| `unknown_ref` | A `#label`, comment or suggestion your link names isn't in this document. Take labels from the text, and a comment's or suggestion's address from its `url`; the message names the nearest labels. |
+| `highlight_not_found` | A highlight link's passage isn't in the document; the message lists them. Quote the words as they read on the page, with no Markdown, and if you name a `block`, name the one whose section holds them. |
+| `highlight_in_text` | A highlight link is only for a comment or reply. In the text link the place with `[words](#label)`, and put the highlight link in a comment. |
 | `invalid_diagram` | A Mermaid diagram you wrote doesn't parse: fix the line in `details` (often a `;` in message text) and resend. See *Mermaid diagrams*. |
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
 | `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin, as the error says, and stop; don't work around it. |
