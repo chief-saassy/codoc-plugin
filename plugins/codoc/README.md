@@ -35,12 +35,19 @@ Without the plugin, add the two parts yourself:
 1. **Connector:** in Settings, Connectors, add a custom connector with the URL `https://codoc.sassysaas.cc/mcp`, then press Connect.
 2. **Skills:** zip `skills/codoc/` and upload it under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` and `skills/prd/` if you want them.
 
+## Install in ChatGPT
+
+Download [`chatgpt/codoc-chatgpt.zip`](https://github.com/chief-saassy/codoc-plugin/raw/main/chatgpt/codoc-chatgpt.zip) from codoc-plugin and upload it as a plugin in ChatGPT. It carries the Codoc MCP server and every skill here; when ChatGPT first uses Codoc it asks you to sign in with your Codoc account.
+
+The ZIP is built from this folder by `scripts/chatgpt-plugin.mjs` in the main Codoc repository, every time the plugin changes on main. Its manifest and MCP config follow ChatGPT's format (`plugin.json`, `mcp.json`, and `.codex-plugin/` for older clients), so don't edit them by hand.
+
 ## Update
 
 An agent tells you when a newer plugin is out. You can keep working until you update, unless the server refuses the agent's call with `outdated_plugin`.
 
 - **Claude Code:** run `/plugin`, update Codoc, then run `/reload-plugins`, or start a new session.
 - **claude.ai and the desktop app, with the plugin:** from the Add menu, open Manage marketplaces and check that it has synced the latest commit. Then update the plugin.
+- **ChatGPT:** download `chatgpt/codoc-chatgpt.zip` again and upload it over the old version.
 - **claude.ai and the desktop app, with an uploaded skill:** zip `skills/codoc/` from this version and upload it again under Settings, Capabilities, Skills. Do the same with `skills/design-doc/` and `skills/prd/` if you use them.
 
 ## Self-hosting
