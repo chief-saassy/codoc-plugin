@@ -21,6 +21,7 @@ Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per
 | `[]{.comment #__c8}` on its own line | a thread on the whole block below | copy as is |
 | `<!-- __c7 @adrian 2026-10-24: … -->` | one comment, read-only | ignored on write; use a `reply` item |
 | `[words](https://…)`, `[words](codoc:abc#fees)` | a link; `codoc:{docId}` is another Codoc document, `codoc:{docId}#label` a section of it | keep it as it is; a bad address is refused with `invalid_link` |
+| `[words][label]`, `[words][]`, `[words]`, with `[label]: https://…` on a line of its own in the same text | a reference link, read as `[words](https://…)`; the definition line gives no block, and labels ignore case | write one when it reads better, with its definition in the same edit, after a blank line. You read it back as `[words](https://…)`. Brackets with no definition stay words |
 | `` `RELEASE_VERSION` ``, ``` `` a ` b `` ``` | inline code: a file path, a name, a command | write it with backticks, as in any Markdown. Inside, nothing is formatting and backslashes are text, except `\|` in a table |
 | `\*`, `\{`, `\$`, `` \` `` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
 
