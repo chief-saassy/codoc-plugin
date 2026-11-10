@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.28.
+description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.29.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.28, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.29, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -132,7 +132,7 @@ In suggest mode you can't change an existing line's level, depth, label or `form
 
 ## New documents
 
-`create_document(title, markdown?, labels?, orgAccess?, request_key?, base_url?, source?)` makes a document the user owns. Use it when the user asks for a new document, for a draft of something to review ("draft a policy for us to go through"), or to bring a Markdown file into Codoc. Don't make one they didn't ask for, or a new copy of a document that exists: `list_documents` first if it might.
+`create_document(title, markdown?, labels?, orgAccess?, request_key?, base_url?, source?)` makes a document the user owns. Use it when the user asks for a new document, for a draft of something to review ("draft a policy for us to go through"), or to bring a Markdown file or a Google Doc into Codoc (*Importing a Google Doc*). Don't make one they didn't ask for, or a new copy of a document that exists: `list_documents` first if it might.
 
 - `markdown` is your first draft, written as in *Structure and numbers* above and `format.md`: it becomes the text itself, not suggestions, so write no suggestion spans or comment markers.
 - **Headings start at `#`.** The document's title is `title`, outside the text, so don't repeat it as a heading. Top-level sections are heading 1 (`#`), their subsections heading 2 (`##`), then 3 and so on. (An imported file that repeats the title as `#` and starts its sections at `##` is fixed for you: see *Importing existing Markdown*.) Every heading gets a readable label from its words (`## CIDR ledger` is `cidr-ledger`, a repeat `-2`), so `{#label}` is optional on headings; give one to any other block you'll refer to. `[](#label){.live}` and `[words](#label)` must name a block in the same text. Without `markdown` the document starts empty.
@@ -153,6 +153,14 @@ When the user asks to bring in a Markdown file (a README, a design doc from GitH
 - `source`: `{url, commit?}`, where it came from (the same address, and the commit if you know it). It is kept with the document and `read_document` returns it.
 - Links to `#a-heading` stay links to that heading; one matching nothing stays as its words. Hard-wrapped lines join into paragraphs, typed heading numbers (`## 2. Scope`) come off (Codoc numbers headings), a numbered list stays numbered, and what Codoc has no form for (block quotes, footnotes, raw HTML, horizontal rules) is kept as text or dropped, each listed.
 - Then check `report` and tell the user, in a line or two, what changed that they would notice: links kept as text (and why), the title heading dropped, anything kept as text or dropped. Give them the `url`.
+
+### Importing a Google Doc
+
+When the user gives you a Google Docs link and asks to bring it into Codoc, call `create_document(title?, google_doc, labels, request_key)` with the link as they gave it (or its file id), not `markdown`. Leave out `title` unless they named it: it defaults to the Google Doc's name. Any Google Doc they can open in the Google account they connected in Codoc's Settings can be imported; comments and suggestions are not. The tab the link names comes in (or the first): the report gives each other tab's own link, to import as a document of its own.
+
+- Headings, lists in their own numbering ((a), (i), 1.…), bold, italic, tables, links and pictures come in; typed heading numbers ("1. Scope") come off, as Codoc numbers headings itself, and every number reads as it did in the Google Doc.
+- Then tell the user, in a line or two, what `report` says didn't come through as it was: other tabs, footnotes (kept as [1] with their words at the end), pictures left as `[picture: …]`, a list shown in another form, headers and footers. Give them the `url`.
+- `drive_not_connected`: tell them to connect Google Drive in Settings (`/settings#google-drive`), then try again. `not_found` or `forbidden`: that Google account can't open the Google Doc; ask them to check the link or share it with that account.
 
 ## Renaming
 
@@ -281,8 +289,14 @@ To send it somewhere (a repository, a cloud folder, an email), save it first and
 | PDF | Info dictionary: `Keywords`, and the custom key `Codoc` |
 | Codoc Markdown (`md-source`) | front matter line `codoc: "codoc:<doc>@<version>"` |
 | Markdown (`md-portable`) | first line `<!-- codoc:<doc>@<version> -->`, then a blank line |
+| Google Doc | the Drive file's property `codoc`, set by the export and by a restamp |
 
-To trace a file you are given, search its bytes for `codoc:` followed by `@` (e.g. `grep -ao 'codoc:[A-Za-z0-9_-]*@[0-9]*' file`); in Word and PDF it is stored uncompressed. Text extracted from Word or a PDF won't have it. If you make a file from a Codoc document yourself (your own formatting, a different converter, Google Docs), stamp it the same way, in the same place for its format: take `stamp` from `export`, or build it from `read_document`'s `doc` and `version`, the version your content was read at. Never put it in the visible text.
+To trace a file you are given, search its bytes for `codoc:` followed by `@` (e.g. `grep -ao 'codoc:[A-Za-z0-9_-]*@[0-9]*' file`); in Word and PDF it is stored uncompressed. Text extracted from Word or a PDF won't have it. If you make a file from a Codoc document yourself (your own formatting, a different converter), stamp it the same way, in the same place for its format: take `stamp` from `export`, or build it from `read_document`'s `doc` and `version`, the version your content was read at. Never put it in the visible text.
+
+**A Google Doc.** `export(doc, "gdoc")` makes a Google Doc of the current version in the user's own Google Drive, converted from the Word file, and returns its `url` and `file_id`, not a file. `drive_not_connected` means they haven't connected Google Drive: tell them to connect it in Codoc's Settings (`/settings#google-drive`), then try again.
+
+- **Check it, every time.** Codoc reads the Google Doc back and names what differs in `warnings`, each with the `file_id`, but its check is not yours. After every Google Doc export, warnings or not, open the Google Doc with Google's own tools (a Google Drive or Google Docs connector), compare it with the document (`read_document`), and fix by hand what the conversion got a little wrong: a number, a heading level, a table, a picture. Then `export(doc, "gdoc", restamp: <file_id>)`, so the Google Doc's stamp says which version it matches; that answer checks it again. If you have no Google tools, tell the user to look it over, and what `warnings` said.
+- **One copy each.** If the user already has a Google Doc of this document, `export` makes nothing and answers `copy_exists`; `details.copies` names each with its version and `url`. Ask the user: bring one up to date, or make a new copy? A new copy is `new_copy: true`. To bring one up to date, change that Google Doc with Google's own tools to match the document as it stands, then `restamp: <file_id>`. Codoc restamps only a Google Doc it made for this user.
 
 **`download_url` is a secret.** Anyone holding it can get that file for 15 minutes. Use it only to fetch; never put it in a document, comment, reply, handoff, commit or message to anyone, and don't show it unless the user asks. If it has expired, call `export` again. A `not_configured` answer on PDF means PDF isn't available here: say so, and offer Word.
 
