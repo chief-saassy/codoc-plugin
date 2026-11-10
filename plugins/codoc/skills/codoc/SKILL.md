@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.29.
+description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.30.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.29, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.30, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -107,11 +107,12 @@ To name a block for `block`, use its label, or the name the brief and `changed` 
 
 **Link what you refer to; don't just name it.** In document text: a block of this document is `[](#label){.live}` or `[your words](#label)`, another Codoc document `[its title](codoc:{docId})` or one of its sections `[section title](codoc:{docId}#label)`, and an outside source an ordinary `https` link. A full Codoc address (`https://codoc.sassysaas.cc/d/{docId}#label`) is read as its `codoc:` form. Never type a number the document shows ("Section 4.1", "clause 4.1", "§4.1", "(4.1)"): it goes stale as soon as a section is added above it. Write `[](#label){.live}` in text and `[words](#label)` in a comment; `submit_review` warns `number_in_words` when you type one. Take ids and labels from `list_documents` and `read_document`; never guess one.
 
-**In a comment or a reply**, links are the only formatting, and they are written the same way:
+**In a comment or a reply**, links and inline code are the only formatting. Links are written the same way:
 
 - `[words](#label)` for a place in this document (a live reference can't go in a comment), `[words](codoc:{docId})` or `[words](codoc:{docId}#label)` for another document, and `[words](https://…)` for the web. A bare `https://` address becomes a link to itself.
 - A comment or suggestion, here or in another document: link its `url` (`…/d/{docId}?thread=c14`), never write "c14". It reads back as `codoc:{docId}?thread=c14`.
 - In this document, a `#label`, comment or suggestion that isn't there is refused `unknown_ref`, with the nearest names.
+- **To show the syntax itself**, put it in backticks: `` `[words](#label)` `` shows as code and is never a link, a bare address or a highlight link. Or write `\[` for a `[` that starts no link (`\[words](#label)` shows as written, without the backslash); `\\` is a backslash and `` \` `` a backtick. A real link beside them is still checked.
 - **A highlight link** goes to a place and highlights passages there, as `show`'s highlights do: for words with no name of their own (a phrase, a bullet, a row), or for evidence in several places at once:
 
   ```markdown

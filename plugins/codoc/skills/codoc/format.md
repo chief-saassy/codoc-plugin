@@ -32,7 +32,7 @@ Only this format is read. The older forms (`{#sec:x}`, `@sec:x`, `block: "sec:x"
 
 ## Links in comments
 
-A comment or reply shows no Markdown but links. `[words](#label)` is a place in this document, `[words](codoc:{docId})`, `(codoc:{docId}#label)` and `(codoc:{docId}?thread=c14)` are as in text, `[words](https://…)` goes out, a bare `https://` address is a link to itself, and `[words]($e1)` cites an earlier item in the batch. A Codoc address is read as its `codoc:` form. A `#label`, comment or suggestion of this document that isn't there is refused `unknown_ref`.
+A comment or reply shows no Markdown but links and inline code. Text in backticks is code, as in Markdown (a run of backticks closes at the next run as long), and is never read as a link, a bare address or a highlight link. `\[` is a `[` that starts no link, `\\` a backslash and `` \` `` a backtick; any other backslash stays as written. So `` `[words](#label)` `` or `\[words](#label)` shows the syntax itself. `[words](#label)` is a place in this document, `[words](codoc:{docId})`, `(codoc:{docId}#label)` and `(codoc:{docId}?thread=c14)` are as in text, `[words](https://…)` goes out, a bare `https://` address is a link to itself, and `[words]($e1)` cites an earlier item in the batch. A Codoc address is read as its `codoc:` form. A `#label`, comment or suggestion of this document that isn't there is refused `unknown_ref`.
 
 A highlight link adds `{…}` straight after the `)`, with no space: `[words](place){highlight="…" block="…" highlight="…"}`.
 
