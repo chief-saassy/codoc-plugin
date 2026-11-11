@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.30.
+description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.31.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.30, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.31, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -71,7 +71,7 @@ Each item applies on its own. `applied` items are written: never send them again
 
 If you get `review_closed` (`done:true` closes the review even when items failed), call `open_review` again and resubmit there, with `done:true`. If an answer is lost, send the same call again.
 
-Then read `warnings`, in the `submit_review` result and in the next `open_review`. A warning never stops a write, so nothing else will tell you. Fix the ones your own changes introduced (a reference to something you deleted or renamed, a diagram that doesn't parse, a number you typed as words, `number_in_words`) in the same round, or in the next. Tell the user about the rest, which were already in the document or came from someone else, and leave them alone unless they ask you to fix them.
+Then read `warnings`, in the `submit_review` result and in the next `open_review`. A warning never stops a write, so nothing else will tell you. Fix the ones your own changes introduced (a reference to something you deleted or renamed, a diagram that doesn't parse) in the same round, or in the next. `number_in_words` only asks: a number you wrote, such as "(2)", is also a number the document shows. If you meant that block, link it as the warning says; if you meant something else, such as a count, leave it. Tell the user about the rest, which were already in the document or came from someone else, and leave them alone unless they ask you to fix them.
 
 ## Structure and numbers
 
