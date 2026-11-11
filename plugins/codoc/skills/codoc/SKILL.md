@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.31.
+description: Use when creating, renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents, or managing their labels, through the codoc MCP tools (create_document, rename_document, trash_document, name_version, restore_version, open_review, submit_review, the label tools), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.32.
 ---
 
 # Codoc review
@@ -9,7 +9,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.31, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
+`open_review(doc, hat?)`. Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3). This skill is plugin version 0.2.32, for `format_version` 2. Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it. Once per conversation, before other Codoc work, call `whats_new`, with `since` if you know the release you last saw: tell the user, once, about any step a release's `actions` asks of them. Read `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
 ## 2. Decide what the agenda asks
 
@@ -222,6 +222,18 @@ When they ask to be shown something, such as "show me where it says that", that 
 - It only moves the window. Change documents with `submit_review`, as always. `release` the connection when you've finished.
 
 Don't bring windows up otherwise: not during quick fixes or unattended work, and not again in a conversation once declined.
+
+## Choices are tick boxes
+
+Whenever you put a choice to a person in a document, write it as tick boxes they can tick, not as a question in prose. This holds in any document that is mainly you and the owner talking: a PRD or a design, and just as much a page of draft emails to approve, a list of options, a plan to sign off.
+
+- **One answer you recommend:** say it and why, with an unticked `- [ ] Approve` under it. **A real pick:** the options as unticked boxes after "Tick one:", the one you recommend marked. Most questions have one good answer and get `Approve`.
+- **In context.** Each box sits right after what it decides: under each email, under the clause, in the section it is about. Never gather them at the start or the end of the document.
+- **Who ticks.** With one person working on the document, don't say: it is them, and naming them is noise. With several reviewers, say who is to tick each box that isn't for everyone ("*Tick: Sam*"). A box meant for an agent with a hat says so, with the hat ("*Tick: the `security` agent*"); an agent ticks only boxes that name its hat.
+- **Never tick a box meant for a person.** Ticking is an edit, so in suggest mode you can't tick at all.
+- **Emails: draft or send.** Under an email you wrote, offer "Tick one:" with `Send` and `Save as a draft`, when you have a way to send it. If you can only draft it, or it needs an attachment you can't add, offer only `Save as a draft` and say why in a line ("it needs the signed PDF, which I can't attach"), so the person adds it and sends it themselves.
+- **Act on the tick.** On a later round, a ticked box is settled: don't reopen it. Do what was chosen (send the email or save the draft, write the chosen clause in), make the document say so, and build on it.
+- **Whether the decision stays depends on the document.** In a document going to someone else, such as a contract, a letter or a policy, the boxes are only for preparing it: once ticked, rewrite the text as chosen and take the boxes and the options not chosen out, so nothing of the choosing is left. In a PRD or design document the ticked boxes may stay as a record of what was approved (the `prd` and `design-doc` skills keep them); in anything else, remove them unless the owner wants the record.
 
 ## Hats and groups
 

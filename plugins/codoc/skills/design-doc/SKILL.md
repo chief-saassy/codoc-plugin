@@ -86,6 +86,8 @@ Use whichever fits what is being asked; most questions have one good answer and 
 
 - Never tick one yourself. The reader ticks to approve your recommendation or to make their choice, and comments to disagree or to answer differently.
 - On a later round, a ticked question is settled: don't reopen it, and build on it as approved.
+- With several reviewers, say who ticks a box not meant for everyone, as the `codoc` skill's *Choices are tick boxes* says; with one, don't.
+- Ticked boxes stay in a design document as the record of what was approved.
 - If a change you make alters what an approved question says, untick its ticked box in the same edit and say why in a comment, so the reader approves it again. In suggest mode you can't untick: say in a comment that the approval needs another look.
 
 ## Claims
