@@ -43,7 +43,7 @@ The ZIP is built from this folder by `scripts/chatgpt-plugin.mjs` in the main Co
 
 ## Update
 
-An agent tells you when a newer plugin is out. You can keep working until you update, unless the server refuses the agent's call with `outdated_plugin`.
+An agent tells you when a newer plugin is out. You can keep working until you update, unless the server refuses the agent's call with `outdated_plugin`: meanwhile the agent fetches the latest skills from the Codoc server (`latest_skill`) and follows those. Updating is still better, since then it has them from the start.
 
 - **Claude Code:** run `/plugin`, update Codoc, then run `/reload-plugins`, or start a new session.
 - **claude.ai and the desktop app, with the plugin:** from the Add menu, open Manage marketplaces and check that it has synced the latest commit. Then update the plugin.

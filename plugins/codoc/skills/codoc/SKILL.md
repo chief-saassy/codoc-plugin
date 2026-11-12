@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, importing (a Markdown file or a Google Doc), exporting (Word, PDF, Markdown, Google Docs), renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents; filling in or making templates; adding images or assets; showing the person something in a Codoc window; or managing labels, through the codoc MCP tools (create_document, export, open_review, submit_review, create_from_template, upload_image, show, the label tools and the rest), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.43.
+description: Use when creating, importing (a Markdown file or a Google Doc), exporting (Word, PDF, Markdown, Google Docs), renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents; filling in or making templates; adding images or assets; showing the person something in a Codoc window; or managing labels, through the codoc MCP tools (create_document, export, open_review, submit_review, create_from_template, upload_image, show, the label tools and the rest), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.44.
 ---
 
 # Codoc review
@@ -11,10 +11,10 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-This skill is plugin version 0.2.43, for `format_version` 2.
+This skill is plugin version 0.2.44, for `format_version` 2.
 
 1. **Once per conversation, before other Codoc work,** call `whats_new`, with `since` if you know the release you last saw. Tell the user, once, about any step a release's `actions` asks of them.
-2. **Check the version.** Every answer's `plugin_notice` names the latest plugin: if it is newer than this version, encourage the user to update, once in the conversation, as it says, and carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it.
+2. **Check the version.** When you load this skill, check it is the latest: `whats_new` (`supported.latest_plugin`) and every answer's `plugin_notice` name the latest plugin. If that is newer than this version, call `latest_skill` and follow the skills it returns in place of this one and the plugin's other skills, fetching each skill and file before you use it, as its first lines say; and encourage the user to update, once in the conversation, as `plugin_notice` says, since the plugin should carry the latest skills from the start. Then carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it.
 3. **`open_review(doc, hat?)`.** Use a hat only if you were given one, and keep the returned `review`. Everything you write in that round carries the hat, and readers see it next to your name, so don't start comments or replies with it (no "Security:" or "[security]"). `role` is the user's role on the document and `owner` the name of whoever owns it: they decide the mode (§3).
 4. **Read** `handoff` (your note from last round), then `agenda`, then `mine`; `blocks` holds the text the agenda names. On a first visit `blocks` is the whole document. Call `read_document(doc, window?)` only if you need more context, and `thread(doc, thread)` for a thread's history.
 
