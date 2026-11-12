@@ -33,7 +33,7 @@ In this order. Name each section for what it says.
 
 1. **The summary, on the first screen,** under a heading of its own, such as `# Summary`: a document never opens with a bare paragraph. What people get, in plain words, and why it matters to them. Then how many decisions wait for the reader, each a tick box in the section it is about (*Decisions are tick boxes*).
 2. **Who and when:** one or two concrete scenarios in the user's own terms ("a contract goes out as V1, comes back with redlines, and goes out again as V2"). Name the people involved and what each may do.
-3. **What it does, as people meet it:** each flow from where it starts to what they see after. Every rule they will run into (who may, when it is refused, limits) and what a refusal says.
+3. **What it does, as people meet it:** each flow from where it starts to what they see after, as numbered steps (*A process is numbered steps*). Every rule they will run into (who may, when it is refused, limits) and what a refusal says.
 4. **The states off the happy path:** what people see when there is nothing yet, when there are very many, when they are offline or it is slow, and when someone else changes or removes the thing while they look. Leave out those that can't happen.
 5. **Mocks** for every new or changed screen, menu, dialog or state that looks different, each beside the flow it shows, with a one-line caption. Draw them on the product's real look: the running product with the change added, or its own UI kit and icons, never a generic wireframe kit. Show the phone too when the layout differs there.
 6. **Goals and non-goals:** what this must do, and what it deliberately doesn't. Non-goals stop the design growing; name anything the user ruled out.
@@ -41,6 +41,34 @@ In this order. Name each section for what it says.
 8. **A last line naming what was left out,** so the reader can ask.
 
 Mark who decided what: *(owner)* for the user's decisions, *(writer's call)* for yours, so the reader can check yours. Where a question is still unsettled, mark it *(open)* where it comes up, with its decision there.
+
+## A process is numbered steps
+
+Whenever the text says what happens in turn (a flow a person goes through, what the product does after they act, what happens when someone else joins), write it as a numbered list:
+
+- One step per item, in the order it happens, each starting with who acts: the person, another person, the product.
+- A step that branches says where each answer goes, in the step itself: "If the name is taken, the dialog says so and keeps what they typed."
+- A line before the list says what the steps achieve; a line after it, only if needed, says where the person ends up.
+- A mock goes beside the step it shows.
+
+You know you are writing a process when the sentences only make sense in their order, or when "then", "next" or "once" link them. A rule that holds at every step (who may, a limit) stays a sentence or a bullet beside the list.
+
+A paragraph that reads one step after another:
+
+```markdown
+The owner presses Share and picks a person, who gets an email; once they open
+the link they see the document as a viewer, and the owner can then raise them
+to editor from the same dialog, which tells the person by email too.
+```
+
+The same as steps:
+
+```markdown
+1. The owner presses **Share** and picks a person.
+2. The person gets an email with a link.
+3. They open it and see the document as a viewer.
+4. The owner can raise them to editor from the same dialog; the person gets a second email.
+```
 
 ## Decisions are tick boxes
 
@@ -85,7 +113,7 @@ Be concise, but never leave out an important part of what the feature does: comp
 
 Before handing over, have a fresh reader review the PRD, and finish that review yourself, so the user gets a finished document and only the questions that are truly theirs.
 
-1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url and this brief: read it as the person who must approve it, and as the builder who must design from it; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter; nothing you could settle yourself, and no wording nitpicks.
+1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url and this brief: read it as the person who must approve it, and as the builder who must design from it; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter, and on each process told as a paragraph instead of numbered steps; nothing you could settle yourself, and no wording nitpicks.
 2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(writer's call)*. Then reply saying what you changed, with links to where (`codoc` skill, *In a comment or a reply*), and resolve the reader's thread: this skill asks you to. A thread a person started, such as the user's own comment, gets the same answer and a reply but stays open: they resolve it, and you resolve it only if the user asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and give it a decision with an Approve box there.
 3. **Send the reader back** (the same subagent, whose agenda shows your replies and changes) until it leaves no new comment, at most three rounds.
 4. **Hand over** with the open questions, each linked to its comment. Never hand over with a reader's comment unanswered.
