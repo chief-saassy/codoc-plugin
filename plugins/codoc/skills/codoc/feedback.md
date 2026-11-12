@@ -3,12 +3,12 @@
 `send_feedback` tells the Codoc team about a problem with Codoc or an improvement. Send one:
 
 - **when the person asks you to** (`initiative: "asked"`);
-- **on your own initiative** (`initiative: "own"`), only about your own experience of Codoc's tools: a refusal you can't make sense of, an answer that contradicts this skill or the tool descriptions, something that should work and doesn't, an error you had to work around, or an improvement that would have made the work easier. Not about the person's documents, and not their opinions of Codoc unless they ask you to pass them on.
+- **on your own initiative** (`initiative: "own"`), at every rough spot in your own experience of Codoc's tools, as `SKILL.md` §5 lists them. Not about the person's documents, and not their opinions of Codoc unless they ask you to pass them on.
 
-On your own initiative, call `feedback_setting()` first, and draft nothing when it says `off`. Change the setting only when the person asks (`feedback_setting(mode)`).
+On your own initiative, call `feedback_setting()` each time, before you draft, and draft nothing when it says `off`; never go by an earlier answer, since the person can change it at any moment. Change the setting only when the person asks (`feedback_setting(mode)`).
 
 - **`off`**: nothing is recorded, even when the person asked. On `feedback_off`, tell them they can turn it on in Settings, under Agents, or use Send feedback in the app.
-- **`ask`** (Ask me first, the default): show the person the report word for word and ask whether to send it. Only after they say yes to that exact text, send exactly that text with `approved: true`. If they change it, show it again. Without `approved`, the answer is `needs_approval`.
+- **`ask`** (Ask me first, the default): at the next point you speak to the person anyway, show them the report word for word and ask whether to send it. Only after they say yes to that exact text, send exactly that text with `approved: true`. If they change it, show it again. Without `approved`, the answer is `needs_approval`.
 - **`send`** (Send without asking): send it, then tell the person in one line that you did.
 
 Write the report so the team can reproduce the problem: the tool, what you sent, what came back (the code), and what you expected. Use **examples you make up** ("an edit whose `old` is `Alpha beta`"), never the person's own words, names, figures, document titles or ids, unless they asked you to include them. Pass `doc` and `hat` only when the person asked you to send feedback about that document.

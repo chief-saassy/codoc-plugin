@@ -81,6 +81,31 @@ If you get `review_closed` (`done:true` closes the review even when items failed
 
 Then read `warnings`, in the `submit_review` result and in the next `open_review`. A warning never stops a write, so nothing else will tell you. Fix the ones your own changes introduced (a reference to something you deleted or renamed, a diagram that doesn't parse) in the same round, or in the next. `number_in_words` only asks: a number you wrote, such as "(2)", is also a number the document shows. If you meant that block, link it as the warning says; if you meant something else, such as a count, leave it. Tell the user about the rest, which were already in the document or came from someone else, and leave them alone unless they ask you to fix them.
 
+## 5. Feedback on every rough spot
+
+Every time Codoc's tools give you a rough spot, tell the Codoc team, unless the person has turned feedback off. That is how Codoc gets better, and nobody else will report what you hit. A rough spot is any of these:
+
+- a refusal you can't make sense of, or had to retry more than once;
+- an answer that contradicts this skill or the tool descriptions;
+- something that should work and doesn't;
+- an error you had to work around;
+- an improvement that would have made the work easier.
+
+Each time:
+
+1. **Call `feedback_setting()` now.** The person can change it in Settings at any moment, so an earlier answer, `off` included, is stale.
+2. **`off`:** send nothing, and carry on.
+3. **`ask` or `send`:** write the report and send it as `feedback.md` says, with `initiative: "own"`. In `ask`, show it at the next point you speak to the person anyway, such as when you hand over, so it doesn't break their work.
+
+One report per problem per conversation; several refusals of one kind are one problem.
+
+| You think | Instead |
+|---|---|
+| "I worked around it, so it doesn't matter" | A workaround is a rough spot. Report it. |
+| "It's minor" | Minor problems are the ones nobody else reports. |
+| "Feedback was off earlier" | Call `feedback_setting()` again. |
+| "The person is busy" | In `send` it costs them nothing; in `ask` it waits for your handover. |
+
 ## Structure and numbers
 
 It is standard Markdown, so write what you'd write in any Markdown file. There are a few additions. Numbers are computed: never type one, in text or in a new paragraph. Read them from `<!-- (a), cited as 4.1(a) -->`, which are derived and ignored on write. A comment never changes what a block is.
@@ -227,7 +252,7 @@ Before you do one of these, read its file, beside this one. Each holds the rules
 | naming, comparing or restoring a version | `versions.md` |
 | trashing or restoring a document, or making a temp one | `trash-and-temp.md` |
 | showing the person something in one of their Codoc windows | `windows.md` |
-| telling the Codoc team about a problem with Codoc | `feedback.md` |
+| writing and sending feedback to the Codoc team (§5 says when) | `feedback.md` |
 | the exact format and every result's fields | `format.md`; `examples/` has worked rounds |
 
 Some rules hold even before you read the file: you never delete a document, only trash one when the user asks; you name or restore a version only on the user's word; you connect to a window only when they ask to be shown something, and never ask for one.
