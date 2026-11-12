@@ -2,6 +2,24 @@
 
 Read this when `SKILL.md` doesn't settle a question about the text you were given.
 
+Contents, in order. Search for the heading to jump to one:
+
+- Agent Markdown
+- Links in comments
+- Changing text that already carries suggestions
+- Whole-block replacement
+- Images
+- Code blocks
+- Mermaid diagrams
+- Structure attributes
+- Numbering
+- `open_review` result
+- `submit_review` result
+- A new document's Markdown
+- `create_document` result
+- Label results
+- `read_document` result
+
 ## Agent Markdown
 
 Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per line, plus:
@@ -61,7 +79,7 @@ One edit that changes someone's proposed text and plain text as well is still on
 
 ## Images
 
-An image is a line `![alt text](codoc-image:sha256-…)` with its caption on the lines after it, up to a blank line. To add one, send it to a link first (*Sending a file* in the skill), or without a shell call `upload_image(doc, data)` (base64 of the file, or the text of an SVG with `encoding: "utf8"`), then put the `markdown` line it returns, followed by a caption, in an edit, with a blank line before and after. Uploading the same bytes again gives the same `src`. The caption is text like any other; changing the alt text or the picture is a direct edit, refused in suggest mode. A `src` that was never uploaded is refused.
+An image is a line `![alt text](codoc-image:sha256-…)` with its caption on the lines after it, up to a blank line. To add one, send it to a link first (`files-and-assets.md`), or without a shell call `upload_image(doc, data)` (base64 of the file, or the text of an SVG with `encoding: "utf8"`), then put the `markdown` line it returns, followed by a caption, in an edit, with a blank line before and after. Uploading the same bytes again gives the same `src`. The caption is text like any other; changing the alt text or the picture is a direct edit, refused in suggest mode. A `src` that was never uploaded is refused.
 
 ## Code blocks
 

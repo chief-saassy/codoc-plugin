@@ -7,6 +7,60 @@ section says (`apps/core/test/chart-skill-examples.test.ts`).
 Every example follows Codoc's rules: the data is written in the source, nothing is fetched, there is no `title` (give the
 chart a short line of prose instead), and colours and fonts are left to Codoc's theme unless they carry meaning.
 
+Contents, in order. Search for the heading to jump to one:
+
+- Report charts
+  - Bars with a fitted exponential trend
+  - Bars with a fitted linear trend
+  - Smoothed line with area and labels
+  - Period averages
+  - Percentage line on a narrow axis
+  - Change by month, coloured by sign
+  - Observed against adjusted
+- Sorted horizontal bar
+- Bar with value labels
+- Grouped bar
+- Stacked bar with totals
+- 100% stacked bar
+- Diverging bar
+- Line over time
+- Several series
+- Line with points
+- Step line
+- Smoothed line
+- Area
+- Stacked area
+- Linear trend line
+- Loess trend
+- Moving average
+- Target or reference line
+- Forecast with an interval
+- Range band (percentiles)
+- Pie with percentage labels
+- Donut with labels inside
+- Scatter with a trend line
+- Bubble chart
+- Histogram
+- Box plot
+- Box plot from a summary
+- Heatmap
+- Two measures on two axes
+- Waterfall (bridge)
+- Funnel
+- Bullet chart
+- Progress against target
+- Gantt or timeline
+- Small multiples
+- Slope chart
+- Dumbbell
+- Pareto chart
+- Running total against a target (burn-up)
+- Labels at the ends of lines
+- One series highlighted
+- Annotated point and event line
+- Number formats: currency, thousands and percentages
+- Number formats: another currency or locale
+
 ## Report charts
 
 Charts from a real monthly growth report, the range agents are most often asked for. They share one way of drawing

@@ -72,30 +72,10 @@ The same as steps:
 
 ## Decisions are tick boxes
 
-Each question only the reader can answer, and each call of yours they should check, is written in plain words with your recommendation and why: by default one answer, not a menu of options. Under each, on its own, an unticked `Approve` box. Each decision sits in the section it decides, straight after the information it depends on, so the reader approves once they have read what is being done. Never gather them in the summary:
+Each question only the reader can answer, and each call of yours they should check, is a decision written as the `codoc` skill's *Choices are tick boxes* says: one answer you recommend with an `Approve` box, or a real pick as "Tick one:". In a PRD:
 
-```markdown
-- **Undo outside Editing.** Keep ticks in the one undo history, and let the page pass Ctrl+Z on in Commenting. A separate record of ticks would be a second undo system for no gain.
-
-  - [ ] Approve
-```
-
-When the owner really has to choose (two answers are each reasonable and it turns on their preference, or the question asks for a pick), give the options as unticked boxes instead, with a line saying what to tick, and mark the one you recommend:
-
-```markdown
-- **Where the Approve box goes.** Tick one:
-
-  - [ ] Under each question *(recommended: each can be approved on its own)*
-  - [ ] Once, for the whole document
-```
-
-Use whichever fits what is being asked; most questions have one good answer and get `Approve`.
-
-- Never tick one yourself. The reader ticks to approve your recommendation or to make their choice, and comments to disagree or to answer differently.
-- On a later round, a ticked question is settled: don't reopen it, and build on it as approved.
-- With several reviewers, say who ticks a box not meant for everyone, as the `codoc` skill's *Choices are tick boxes* says; with one, don't.
-- Ticked boxes stay in a PRD as the record of what was approved.
-- If a change you make alters what an approved question says, untick its ticked box in the same edit and say why in a comment, so the reader approves it again. In suggest mode you can't untick: say in a comment that the approval needs another look.
+- **Each decision sits in the section it decides**, straight after the information it depends on, so the reader approves once they have read what is being done. Never gather them in the summary; the summary says how many wait.
+- **Ticked boxes stay** as the record of what was approved, and a ticked question is settled: build on it.
 
 ## Revising
 
@@ -113,7 +93,7 @@ Be concise, but never leave out an important part of what the feature does: comp
 
 Before handing over, have a fresh reader review the PRD, and finish that review yourself, so the user gets a finished document and only the questions that are truly theirs.
 
-1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url and this brief: read it as the person who must approve it, and as the builder who must design from it; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter, and on each process told as a paragraph instead of numbered steps; nothing you could settle yourself, and no wording nitpicks.
+1. **Start a fresh subagent** that knows nothing of the conversation. Give it the document's url and this brief: read it as the person who must approve it, and as the builder who must design from it; leave a comment, with the hat `reader`, on each place where you would have to ask or guess and a wrong guess would matter, and on each process told as a paragraph instead of numbered steps; nothing you could settle yourself, and no wording nitpicks. Each round is a full review: read the whole document again, and new comments are expected.
 2. **Answer every comment yourself.** If the conversation or the code answers it, write the answer into the document. If it is minor, decide it and mark it *(writer's call)*. Then reply saying what you changed, with links to where (`codoc` skill, *In a comment or a reply*), and resolve the reader's thread: this skill asks you to. A thread a person started, such as the user's own comment, gets the same answer and a reply but stays open: they resolve it, and you resolve it only if the user asks you to. Only a question the user alone can answer stays open: reply that it waits for them, mark it *(open)* in the text, and give it a decision with an Approve box there.
 3. **Send the reader back** (the same subagent, whose agenda shows your replies and changes) until it leaves no new comment, at most three rounds.
 4. **Hand over** with the open questions, each linked to its comment. Never hand over with a reader's comment unanswered.
@@ -122,6 +102,6 @@ Skip the check only for a one-page change the user asked for in a hurry.
 
 ## In Codoc
 
-Use the `codoc` skill for the tools. Create the document with `create_document`, with a `request_key` and labels. Call `list_labels` first; a PRD gets the PRD label (such as `prd`) and the project's label, where they exist. Add each mock to the document as an image (*Sending a file* in the `codoc` skill), then put it in place with an edit.
+Use the `codoc` skill for the tools. Create the document with `create_document`, with a `request_key` and labels. Call `list_labels` first; a PRD gets the PRD label (such as `prd`) and the project's label, where they exist. Add each mock to the document as an image (the `codoc` skill's `files-and-assets.md`), then put it in place with an edit.
 
 **A PRD and its design documents link to each other.** When a design document is written, add a link to it on the line after the PRD's summary ("Design: [its title](its url)"), and the design document links back the same way. A PRD with several design documents links to each one. Keep the links when either is revised.
