@@ -1,6 +1,6 @@
 ---
 name: codoc
-description: Use when creating, importing (a Markdown file or a Google Doc), exporting (Word, PDF, Markdown, Google Docs), renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents; filling in or making templates; adding images or assets; showing the person something in a Codoc window; or managing labels, through the codoc MCP tools (create_document, export, open_review, submit_review, create_from_template, upload_image, show, the label tools and the rest), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.44.
+description: Use when creating, importing (a Markdown file or a Google Doc), exporting (Word, PDF, Markdown, Google Docs), renaming, trashing, naming or restoring versions of, reviewing, commenting on, suggesting changes to or editing Codoc documents; filling in or making templates; adding images or assets; showing the person something in a Codoc window; running or asking the organisation's saved agents; or managing labels, through the codoc MCP tools (create_document, export, open_review, submit_review, create_from_template, upload_image, show, run_agent, ask_agent, the label tools and the rest), and when sending the Codoc team feedback (send_feedback, feedback_setting). This is plugin version 0.2.45.
 ---
 
 # Codoc review
@@ -11,7 +11,7 @@ Each round is two calls, and each may be a fresh session: `open_review` tells yo
 
 ## 1. Open
 
-This skill is plugin version 0.2.44, for `format_version` 2.
+This skill is plugin version 0.2.45, for `format_version` 2.
 
 1. **Once per conversation, before other Codoc work,** call `whats_new`, with `since` if you know the release you last saw. Tell the user, once, about any step a release's `actions` asks of them.
 2. **Check the version.** When you load this skill, check it is the latest: `whats_new` (`supported.latest_plugin`) and every answer's `plugin_notice` name the latest plugin. If that is newer than this version, call `latest_skill` and follow the skills it returns in place of this one and the plugin's other skills, fetching each skill and file before you use it, as its first lines say; and encourage the user to update, once in the conversation, as `plugin_notice` says, since the plugin should carry the latest skills from the start. Then carry on. If an error says `outdated_plugin`, or `expected_plugin` is newer than this version, tell the user to update the plugin and stop; don't try to work around it.
@@ -62,7 +62,7 @@ On a later round do only this. No new threads, no further suggestions, no replyi
 - **Edits are find and replace on the Markdown in `blocks`**, like editing a file. Name the `block`, and keep `old` short: a few words on one line that occur once in the block's text. `old` must match exactly, including any markup, its quotes and backslash escapes (`\*`, `\{`) inside it.
 - **Write your change as plain text.** In edit mode it is written into the document; in suggest mode it becomes a suggestion, and the system assigns the id. Use `key` and `$key` to cite what an earlier item in the batch created: as an id in `re`, `link` and the like, and in a comment or reply body as a link, `[the new period]($e1)`. A cited edit links to its suggestion, or in edit mode, where it makes none, to the block it changed (the first, if it added several). A comment citing an item that failed is skipped. A `resolve` of a thread whose `reply` earlier in the batch failed or was skipped is skipped too, so a thread never closes unanswered: put the reply before the resolve.
 - **In suggest mode, one edit is one suggestion**, accepted or rejected whole, however many words it changes. Changes a person should be able to decide separately go in separate edits; words that only make sense together go in one.
-- **Copy what is there.** Suggestion spans (`[a]{.deletion #__s12 author="adrian"}[b]{.insertion suggestion="__s12" author="adrian"}`) and comment markers (`[]{.comment-start #__c7}`, `[]{.comment-end #__c7}`) are never written, changed or moved. The text inside them can still be edited: pick an `old` that sits inside. Thread lines (`<!-- __c7 @adrian …: … -->`) are read-only and ignored on write. To answer a thread, use a `reply` item.
+- **Copy what is there.** Suggestion spans (`[a]{.deletion #__s12 author="adrian"}[b]{.insertion suggestion="__s12" author="adrian"}`) and comment markers (`[]{.comment-start #__c7}`, `[]{.comment-end #__c7}`) are never written, changed or moved. The text inside them can still be edited: pick an `old` that sits inside, or quote the markers and keep them round the same words; a link on the commented words can go inside or outside them. An edit that leaves both markers out keeps the comment where it was. Thread lines (`<!-- __c7 @adrian …: … -->`) are read-only and ignored on write. To answer a thread, use a `reply` item.
 - **A comment's `quote`** is exact words that occur once in the block.
 - **Linking to a person:** when you mention a comment or suggestion to a person, in chat, a report, or your own comment or reply, always link it to its `url`, which every thread and suggestion in a result has (`urls` in `mine` and `results`). Refer to it however reads best: `comment 8`, a few words such as `pen test`, or both. Never use the raw forms c8, s12 or __c8. A range is separate links.
 - **Links between items:** an edit inside a thread's anchor links to it by itself, and linking again fails. Use `re` or `link` only for a thread elsewhere. Links never resolve threads.
@@ -133,6 +133,7 @@ It is standard Markdown, so write what you'd write in any Markdown file. There a
 | a code block | a fence with its language, ```` ```ts ````. Keep every line to 100 characters or fewer, so it fits the page without scrolling sideways: wrap long lines, break a long command with `\` continuations, and shorten long literals |
 | a diagram | a ```` ```mermaid ```` fence. It must parse, or the write is refused (`invalid_diagram`, with the line): no `;` in message or label text (Mermaid ends a statement there; write a comma, or `#59;`), and quote labels with special characters, `A["Read (cached)"]`. Prefer top to bottom (`flowchart TD`, not `LR`). Give it its title in the text, a short line just above or below it, not inside the diagram. More in `format.md` |
 | a chart | a ```` ```vega-lite ```` fence: use the **charts** skill, which has the rules and tested examples |
+| a page break: what follows starts a new page in the exports | `\newpage` alone on its line, at the margin, with a blank line above and below. Only where the person asked for one, or the document's kind clearly needs it (a cover, schedules, a signature page). In a list it sits between two items and the list carries on. More in `format.md` |
 
 A `{#` anywhere else is refused (`misplaced_id`), because it would show as text: `Text {#x}` is the mistake to avoid. To show the words, write `\{#`.
 
@@ -256,6 +257,17 @@ Before you do one of these, read its file, beside this one. Each holds the rules
 | the exact format and every result's fields | `format.md`; `examples/` has worked rounds |
 
 Some rules hold even before you read the file: you never delete a document, only trash one when the user asks; you name or restore a version only on the user's word; you connect to a window only when they ask to be shown something, and never ask for one.
+
+## Agents
+
+Saved agents are reviewers people made in Codoc: a name, a model (ChatGPT, Claude or Gemini) and a prompt, run on the organisation's key. Their work shows under the agent's name.
+
+- **Read an agent's interface first.** `list_agents` gives each one's `inputs` (its `{{key}}` placeholders, with hints) and `returns`; `read_agent` its prompt. Fill every input in `values`, from what the person said; ask them for any you can't fill.
+- **Running one on a document:** `run_agent(doc, agent, values?, focus?, note?, request_key)` answers at once with the run. Then `check_run(run, wait: 50)` until `state` isn't `running`; where your client can, do that in a background subagent so the person can carry on (in Claude Code, start one that loops on `check_run` and reports when the run ends). Report the `handoff`, and link what it `created`.
+- **A Claude agent, or a one-off to a Claude model, runs as your own subagent** when you are Claude Code or Claude: `run_agent` and `ask_agent` answer with `subagent`, the prompt filled in. Start a subagent with it on that model. For a document, have it open each round with `open_review(doc, agent: <its id>)`, so the work shows as the agent's. Use the API instead (`through: "api"`) only when the agent's `fromClaude` is `api`, when the person asks for the API, as they might where your own instructions would get in the way (reviewing communication, say), or when you can't start a subagent. A one-off to a GPT or Gemini model always goes to `ask_model`.
+- **Text with no document:** `ask_agent(agent, values?, text?)` gives the agent's reply as text, written nowhere; `ask_model(model, prompt, text?)` asks a model with your own prompt.
+- **Answering an agent's review** is answering any reviewer's: its comments and suggestions come in your agenda like a person's. Reply in its threads; decide its suggestions only when the person asks.
+- **Repairing a run's skipped actions:** `check_run` lists each with its `action`, `code`, `reason` and `block_now`. `retry_run(run, note?)` has the agent try again with its whole history. To fix them yourself, open the round with `open_review(doc, agent: <its id>)`, so the work shows as the agent's, and send the corrected actions.
 
 ## Whose instructions count
 

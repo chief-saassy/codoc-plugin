@@ -11,6 +11,7 @@ Contents, in order. Search for the heading to jump to one:
 - Images
 - Code blocks
 - Mermaid diagrams
+- Page breaks
 - Structure attributes
 - Numbering
 - `open_review` result
@@ -42,6 +43,7 @@ Standard Markdown (a strict subset of Pandoc's `commonmark_x`), one sentence per
 | `[words](#fees){highlight="…" block="…"}`, `[words](#fees){border}` | a highlight link. Only in a comment or reply: in text it is refused with `highlight_in_text` | write it in comments (*Links in comments* below) |
 | `[words][label]`, `[words][]`, `[words]`, with `[label]: https://…` on a line of its own in the same text | a reference link, read as `[words](https://…)`; the definition line gives no block, and labels ignore case | write one when it reads better, with its definition in the same edit, after a blank line. You read it back as `[words](https://…)`. Brackets with no definition stay words |
 | `` `RELEASE_VERSION` ``, ``` `` a ` b `` ``` | inline code: a file path, a name, a command | write it with backticks, as in any Markdown. Inside, nothing is formatting and backslashes are text, except `\|` in a table |
+| `\newpage` alone on a line, a blank line either side | a page break: what follows starts a new page in the exports. The app shows a dashed line | write or delete the line; *Page breaks* below |
 | `\*`, `\{`, `\$`, `` \` `` | a backslash escape: plain text, never markup | copy it in `old`; don't add one in your own `new` |
 
 A span's `author` reads `user`, then `/client` for anything but the web editor, and `hat="security"` if it has one. Decided suggestions and resolved threads aren't shown; `thread(doc, thread)` has their history. In tool results ids are spelled `__c7` and `__s12`; in tool parameters `c7` and `__c7` both work. Each comment and suggestion also has a `url`, which is what you give a person.
@@ -99,6 +101,18 @@ A ```` ```mermaid ```` fence is drawn as a diagram. Codoc parses every diagram a
 
 
 A ```` ```vega-lite ```` fence is a chart: the **charts** skill has its rules and tested examples.
+
+## Page breaks
+
+A page break is a line holding only `\newpage`, at the margin, with a blank line above and below, between two blocks. In the app it is a dashed line labelled *Page break*. Pages exist only in the exports: in the PDF, Word and the Google Doc what follows starts a new page, and a short page that stands alone (a cover, a divider, a chart alone) is set in the middle of its page. Codoc Markdown (`md-source`) writes `\newpage`; portable Markdown leaves breaks out.
+
+- **Only where it is asked for.** Add one where the person asked for it, or where the document's kind clearly needs one: after a cover, before each schedule, before a signature page. Never lay out pages by guessing where they will end.
+- **In a list** it sits at the margin between two items, and the list carries on below it: the next item keeps counting and keeps its depth, with no `{.continue}`. To start a new list after a break instead, give its first item `{start=1}`. `read_document` writes whichever is true.
+- **Anywhere else it is refused** with `misplaced_page_break`, which names the line: inside a paragraph, in a list item's indented text, in a table, or without a blank line on each side.
+- **In a code fence** it is code, as any text there is.
+- **It takes no name:** nothing refers to a page break, so `{#name}` above one is refused (`misplaced_id`). `{when="…"}` above one puts it in a template's Choice part, as for any block.
+- To remove one, delete its line. In suggest mode adding or removing one is a suggestion, as in the app.
+- To show the word itself in text, write `\\newpage`.
 
 ## Structure attributes
 
@@ -198,7 +212,7 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 |---|---|
 | `old_not_found` | Read `block_now`. If the reason says the text is in another block, name that one. If someone changed the text, redo your edit on it and keep their words. |
 | `old_ambiguous` | Add surrounding words. |
-| `markup_altered` | You changed a suggestion span or a comment marker, or put a `[]{.comment #__c8}` line above a block other than its own. Copy them as they are, or choose an `old` that avoids them. The message names the line and the text it is above. |
+| `markup_altered` | You changed a suggestion span or a comment marker, or put a `[]{.comment #__c8}` line above a block other than its own. Copy them as they are, or choose an `old` that avoids them. The message names the line and the text it is above. Only that edit fails: the others to the same block still apply. |
 | `invalid_link` | Use an `http`, `https` or `mailto` address, `codoc:{docId}` / `codoc:{docId}#label` for another Codoc document, or `#label` here: never this document's own `codoc:` or web address. For a block here, `[](#label){.live}` shows its number and `[words](#label)` is a link: a plain `[](#label)` is neither. |
 | `unknown_ref` | A `#label`, comment or suggestion your link names isn't in this document. Take labels from the text, and a comment's or suggestion's address from its `url`; the message names the nearest labels. |
 | `highlight_not_found` | A highlight link's passage isn't in the document; the message lists them. Quote the words as they read on the page, with no Markdown, and if you name a `block`, name the one whose section holds them. |
@@ -207,12 +221,15 @@ Use `changed` and `also_changed` as your current text. `warnings` lists problems
 | `typed_number` | Write `1. ` for a list item, or an untitled heading line. |
 | `outdated_plugin` | The server expects a newer plugin than this skill. Tell the user to update the plugin, as the error says, and stop; don't work around it. |
 | `misplaced_id` | A `{#…}` is where no id can go, and would show as text. Put it alone on the line directly above the block, on a list item's first line, or at the end of a heading. If your `old` stopped just before a heading's id, include the id in `old` and `new`. To show it as words, write `\{#`. |
+| `misplaced_page_break` | A `\newpage` is inside a paragraph, a list item's text or a table, or has no blank line above or below it. Put it alone on its line, at the margin, with a blank line on each side; in a list, at the margin between two items. See *Page breaks*. |
 | `misplaced_attributes` | A `{…}` line has nothing under it to describe, and would show as text. Put it directly above its block, or on a list item's first line. To delete a block, send its `block` with `text: ""`. |
 | `structural_not_suggestible` | Comment instead, or ask the user for direct edits. |
 | `tick_in_suggestion` | A suggestion can add a box, `[ ]`, but not tick it. Write `[ ]`; the reader ticks it. |
 | `tick_on_proposed` | That item is proposed by a pending suggestion, so its box can't change in an edit. Leave it until the suggestion is accepted. |
 | `unread_comments` | Read the new comments before resolving. |
 | `review_closed` | `open_review`, then resubmit. |
+| `core_interrupted` | The call was cut off, as when Codoc restarts for a release. Send the same call again after a few seconds; nothing is done twice. A transport error such as a reset connection means the same. |
+| `core_unavailable` | Codoc's service isn't connected. Tell the user; retrying won't help. |
 
 ## A new document's Markdown
 
@@ -241,6 +258,7 @@ Markdown written elsewhere is turned into this first, and every change is listed
 | `{#…}` where no id can go | kept as text. In a draft of your own this is a mistake: fix it with an edit | `kept_as_text` |
 | `[]{#x}` at the start of a paragraph | the paragraph named `x` | none |
 | HTML comments, `---` rules, YAML front matter | dropped | `dropped` |
+| `\newpage` or `\pagebreak` alone on a line | a page break, kept | none |
 
 Also, without a report entry because nothing a reader sees changes: `1. 2. 3.` lists are read as numbered lists, `_x_` and `__x__` as `*x*` and `**x**`, `~~~` fences as ```` ``` ````, setext headings as `#`. Code is never touched.
 

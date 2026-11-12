@@ -39,7 +39,7 @@ Without the plugin, add the two parts yourself:
 
 Download [`chatgpt/codoc-chatgpt.zip`](https://github.com/chief-saassy/codoc-plugin/raw/main/chatgpt/codoc-chatgpt.zip) from codoc-plugin and upload it as a plugin in ChatGPT. It carries the Codoc MCP server and every skill here; when ChatGPT first uses Codoc it asks you to sign in with your Codoc account.
 
-The ZIP is built from this folder by `scripts/chatgpt-plugin.mjs` in the main Codoc repository, every time the plugin changes on main. Its manifest and MCP config follow ChatGPT's format (`plugin.json`, `mcp.json`, and `.codex-plugin/` for older clients), so don't edit them by hand.
+The ZIP is built from this folder by `scripts/chatgpt-plugin.mjs` in the main Codoc repository, after each deploy. Its manifest and MCP config follow ChatGPT's format (`plugin.json`, `mcp.json`, and `.codex-plugin/` for older clients), so don't edit them by hand.
 
 ## Update
 
@@ -56,7 +56,9 @@ The plugin points at the hosted Codoc. For your own deployment, fork codoc-plugi
 
 ## Versioning
 
-The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told that the server expects a newer version stop and ask for an update. Anything else, such as a new skill, is a patch: installed plugins only receive a new version, and the agents on the last one keep working. Every patch also moves the version in the description and body of `SKILL.md` and the server's `LATEST_PLUGIN`, because every tool answer tells agents the latest version, and agents behind it encourage the user to update and carry on.
+The `codoc` skill is versioned with the server. A change to the projection format or a tool signature bumps the minor `version` in `plugin.json`, along with the version and `format_version` that `skills/codoc/SKILL.md` names, which must match the server's. Agents told that the server expects a newer version stop and ask for an update. Anything else, such as a new skill, is a patch: installed plugins only receive a new version, and the agents on the last one keep working. Every bump also moves the version in the description and body of `SKILL.md` and the server's `LATEST_PLUGIN`, because every tool answer tells agents the latest version, and agents behind it encourage the user to update and carry on.
+
+The version moves once per release, not once per change. A pull request that changes this folder leaves the version alone, unless it changes the format or a tool signature (the minor bump above, which the server needs at once). The deploy workflow moves the patch itself (`scripts/bump-plugin.mjs`), when this folder changed since the last deploy and nothing has moved it yet, and commits it to main as "Plugin x.y.z, for this release". The plugin is published here after each successful deploy, from the commit that went out, so the version people install is always the one the server runs with.
 
 ## Testing
 
